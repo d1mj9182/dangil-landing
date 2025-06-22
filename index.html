@@ -154,6 +154,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
   </style>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".btn-group button").forEach(btn => {
@@ -178,9 +179,8 @@
 </head>
 <body>
   <div class="container">
-    <form method="POST"
-          action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGlzIkkamEqbsTYxce6KhGU0KFlSWtYNZgKW3OIRabpdGaiuVPPo/exec"
-          enctype="application/x-www-form-urlencoded">
+    <form method="POST" enctype="application/x-www-form-urlencoded"
+      action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGIzlkkamEqbsTYxce6KhGU0KFlsWTyNZgKW3OlRabpdGa/exec">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
@@ -216,11 +216,8 @@
 
       <div class="section-title">Q. 통신사를 선택해주세요.</div>
       <div class="btn-group" id="carrier-group">
-        <button type="button">SK</button>
-        <button type="button">KT</button>
-        <button type="button">LG</button>
-        <button type="button">LG 헬로비전</button>
-        <button type="button">KT 스카이라이프</button>
+        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
+        <button type="button">LG 헬로비전</button><button type="button">KT 스카이라이프</button>
       </div>
 
       <div class="section-title">Q. 상품을 선택해주세요.</div>
@@ -232,9 +229,7 @@
 
       <div class="section-title">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
       <div class="btn-group multi" id="addons-group">
-        <button type="button">유심</button>
-        <button type="button">정수기</button>
-        <button type="button">CCTV</button>
+        <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
       </div>
 
       <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
