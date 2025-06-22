@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -101,15 +100,15 @@
       display: block;
       margin-bottom: 6px;
     }
-input[type=text], input[type=tel], select {
-  width: 90%;
-  max-width: 400px;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  display: block;
-  margin: 0 auto;
-}
+    input[type=text], input[type=tel], select {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto;
+    }
     .info-banner {
       background-color: #fff8e1;
       color: #ff6f00;
@@ -138,6 +137,22 @@ input[type=text], input[type=tel], select {
       font-size: 16px;
       cursor: pointer;
     }
+    .review-slider {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 10px;
+      padding: 20px;
+    }
+    .review-slide {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+    .review-slide img {
+      width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
   </style>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -163,41 +178,25 @@ input[type=text], input[type=tel], select {
 </head>
 <body>
   <div class="container">
-    <form method="POST" action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGlzIkkamEqbsTYxce6KhGU0KFlSWtYNZgKW3OIRabpdGaiuVPPo/exec">
+    <form method="POST"
+          action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGlzIkkamEqbsTYxce6KhGU0KFlSWtYNZgKW3OIRabpdGaiuVPPo/exec"
+          enctype="application/x-www-form-urlencoded">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
       <input type="hidden" name="addons" id="addons" />
 
- <div class="banner">
-  <img src="banner.jpg.png" alt="인터넷성지 배너" style="width: 100%; height: auto; border-radius: 10px;" />
-</div>
-<div class="review-slider">
-  <div class="review-slide"><img src="review1.png.png" alt="후기 1" /></div>
-  <div class="review-slide"><img src="review2.png.png" alt="후기 2" /></div>
-  <div class="review-slide"><img src="review3.png.png" alt="후기 3" /></div>
-  <div class="review-slide"><img src="review4.png.png" alt="후기 4" /></div>
-  <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
-</div>
-<style>
-.review-slider {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 10px;
-  padding: 20px;
-}
-.review-slide {
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-}
-.review-slide img {
-  width: 300px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-</style>
-</div>
+      <div class="banner">
+        <img src="banner.jpg.png" alt="인터넷성지 배너" style="width: 100%; height: auto; border-radius: 10px;" />
+      </div>
+
+      <div class="review-slider">
+        <div class="review-slide"><img src="review1.png.png" alt="후기 1" /></div>
+        <div class="review-slide"><img src="review2.png.png" alt="후기 2" /></div>
+        <div class="review-slide"><img src="review3.png.png" alt="후기 3" /></div>
+        <div class="review-slide"><img src="review4.png.png" alt="후기 4" /></div>
+        <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
+      </div>
 
       <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황</h2>
       <div class="realtime">
@@ -217,8 +216,11 @@ input[type=text], input[type=tel], select {
 
       <div class="section-title">Q. 통신사를 선택해주세요.</div>
       <div class="btn-group" id="carrier-group">
-        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
-        <button type="button">LG 헬로비전</button><button type="button">KT 스카이라이프</button>
+        <button type="button">SK</button>
+        <button type="button">KT</button>
+        <button type="button">LG</button>
+        <button type="button">LG 헬로비전</button>
+        <button type="button">KT 스카이라이프</button>
       </div>
 
       <div class="section-title">Q. 상품을 선택해주세요.</div>
@@ -230,7 +232,9 @@ input[type=text], input[type=tel], select {
 
       <div class="section-title">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
       <div class="btn-group multi" id="addons-group">
-        <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
+        <button type="button">유심</button>
+        <button type="button">정수기</button>
+        <button type="button">CCTV</button>
       </div>
 
       <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
