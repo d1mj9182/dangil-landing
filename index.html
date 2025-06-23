@@ -31,7 +31,7 @@
       margin-bottom: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       overflow: hidden;
-      height: 250px;
+      max-height: 250px;
       position: relative;
     }
     .realtime-inner { height: 100%; overflow: hidden; position: relative; }
@@ -49,18 +49,19 @@
       border: 1px solid #bbdefb;
       text-align: center;
     }
-    .realtime thead, .realtime tbody tr {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
+    .status-red { color: red; font-weight: bold; }
+    .status-orange { color: orange; font-weight: bold; }
+    .status-yellow { color: #fbc02d; font-weight: bold; }
+    .status-green { color: green; font-weight: bold; }
+    .admin-select {
+      padding: 4px 6px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-left: 6px;
     }
-    .realtime tbody {
-      display: block;
-      animation: scrollUp 20s linear infinite;
-    }
-    @keyframes scrollUp {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-100%); }
+    .admin-cell {
+      min-width: 170px;
     }
     .btn-group {
       display: flex;
@@ -169,12 +170,13 @@
         <div class="realtime-inner">
           <table>
             <thead>
-              <tr><th>접수일자</th><th>고객명</th><th>상품</th><th>진행상황</th></tr>
+              <tr>
+                <th>접수일자</th><th>고객명</th><th>상품</th>
+                <th class="admin-cell">진행상황<br><span style="font-weight:normal;font-size:13px;color:#777;">(관리자 변경)</span></th>
+              </tr>
             </thead>
-            <tbody>
-              <tr><td>2025-06-22</td><td>김**</td><td>인터넷+TV</td><td>✅ 개통완료</td></tr>
-              <tr><td>2025-06-22</td><td>이**</td><td>유심</td><td>🚞 설치예약</td></tr>
-              <tr><td>2025-06-22</td><td>박**</td><td>CCTV</td><td>⏳ 상담중</td></tr>
+            <tbody id="realtime-body">
+              <tr><td colspan="4">데이터를 불러오는 중...</td></tr>
             </tbody>
           </table>
         </div>
@@ -237,6 +239,93 @@
   </div>
 
   <script>
+    // 실시간 상담 현황 자동 연동 + 상태색상 + 이모지 + 10초 새로고침 + 관리자 상태변경
+    const statusOptions = ["상담예약", "상담중", "설치예약", "입금완료"];
+    const statusLabel = {
+      "상담예약": "🔴 상담예약",
+      "상담중": "🟠 상담중",
+      "설치예약": "🟡 설치예약",
+      "입금완료": "🟢 입금완료"
+    };
+    function fetchData() {
+      fetch("https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec")
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.getElementById("realtime-body");
+          tbody.innerHTML = "";
+
+          data.forEach((row, idx) => {
+            const tr = document.createElement("tr");
+            const status = row.status;
+            // 드롭다운으로 상태 변경
+            tr.innerHTML = `
+              <td>${row.time}</td>
+              <td>${row.name}</td>
+              <td>${row.product}</td>
+              <td class="admin-cell">
+                <span class="${statusClass(status)}" style="margin-right:7px;">${statusIcon(status)} ${status}</span>
+                <select class="admin-select" data-row="${idx}">
+                  ${statusOptions.map(opt => `<option value="${opt}" ${opt===status?'selected':''}>${statusLabel[opt]}</option>`).join('')}
+                </select>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          // 이벤트 부착
+          document.querySelectorAll('.admin-select').forEach(select => {
+            select.addEventListener('change', function(){
+              const rowIdx = this.getAttribute('data-row');
+              const newStatus = this.value;
+              updateStatus(rowIdx, newStatus);
+            });
+          });
+        })
+        .catch(() => {
+          document.getElementById("realtime-body").innerHTML = '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
+        });
+    }
+
+    function statusClass(status) {
+      switch (status) {
+        case "상담예약": return "status-red";
+        case "상담중": return "status-orange";
+        case "설치예약": return "status-yellow";
+        case "입금완료": return "status-green";
+        default: return "";
+      }
+    }
+
+    function statusIcon(status) {
+      switch (status) {
+        case "상담예약": return "🔴";
+        case "상담중": return "🟠";
+        case "설치예약": return "🟡";
+        case "입금완료": return "🟢";
+        default: return "";
+      }
+    }
+
+    // 상태 변경 함수 (시트에 PATCH)
+    function updateStatus(rowIdx, newStatus) {
+      // rowIdx는 데이터 배열의 순서와 동일(헤더 제외)
+      fetch("https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec", {
+        method: "POST",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: "update=1&row="+(parseInt(rowIdx)+2)+"&status="+encodeURIComponent(newStatus)
+        // 시트 2행부터 데이터 시작이니 +2
+      })
+      .then(r => r.text())
+      .then(res => {
+        fetchData();
+      })
+      .catch(() => alert("상태 업데이트 실패"));
+    }
+
+    fetchData();
+    setInterval(fetchData, 10000);
+
+    // 기존 버튼 처리 & 입력 검증
     document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".btn-group button").forEach(btn => {
         btn.addEventListener("click", function () {
