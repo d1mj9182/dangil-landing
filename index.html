@@ -5,142 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>당일민족 상담 신청</title>
   <style>
-    body {
-      font-family: 'Pretendard', sans-serif;
-      background-color: #f9fbfd;
-      margin: 0;
-      padding: 20px;
-    }
+    body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px;}
     .container { max-width: 720px; margin: auto; }
     .banner, .reviews {
-      background-color: #e3f2fd;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 30px;
-      text-align: center;
-      font-weight: bold;
+      background-color: #e3f2fd; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center; font-weight: bold;
     }
-    .section-title {
-      font-size: 18px;
-      margin: 25px 0 10px;
-      font-weight: bold;
-    }
+    .section-title { font-size: 18px; margin: 25px 0 10px; font-weight: bold; }
     .realtime {
-      background: #ffffff;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      overflow: hidden;
-      max-height: 250px;
-      position: relative;
+      background: #fff; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; max-height: 250px; position: relative;
     }
     .realtime-inner { height: 100%; overflow: hidden; position: relative; }
     .realtime table { width: 100%; border-collapse: collapse; }
     .realtime th {
-      background-color: #e1f5fe;
-      padding: 10px;
-      border: 1px solid #90caf9;
-      position: sticky;
-      top: 0;
-      z-index: 2;
+      background-color: #e1f5fe; padding: 10px; border: 1px solid #90caf9; position: sticky; top: 0; z-index: 2;
     }
     .realtime td {
-      padding: 10px;
-      border: 1px solid #bbdefb;
-      text-align: center;
+      padding: 10px; border: 1px solid #bbdefb; text-align: center;
     }
     .status-red { color: red; font-weight: bold; }
     .status-orange { color: orange; font-weight: bold; }
     .status-yellow { color: #fbc02d; font-weight: bold; }
     .status-green { color: green; font-weight: bold; }
     .admin-select {
-      padding: 4px 6px;
-      font-size: 15px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-left: 6px;
+      padding: 4px 6px; font-size: 15px; border-radius: 6px; border: 1px solid #ccc; margin-left: 6px;
     }
-    .admin-cell {
-      min-width: 170px;
-    }
+    .admin-cell { min-width: 170px; }
     .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
     }
     .btn-group button {
-      flex: 1 1 calc(50% - 10px);
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #f0f0f0;
-      cursor: pointer;
-      text-align: center;
+      flex: 1 1 calc(50% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 8px; background-color: #f0f0f0;
+      cursor: pointer; text-align: center;
     }
     .btn-group button.active {
-      background-color: #0077c2;
-      color: white;
-      border-color: #0077c2;
+      background-color: #0077c2; color: white; border-color: #0077c2;
     }
     .form-field { margin-bottom: 20px; }
-    .form-field label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-    }
+    .form-field label { font-weight: bold; display: block; margin-bottom: 6px; }
     input[type=text], input[type=tel], select {
-      width: 90%;
-      max-width: 400px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      display: block;
-      margin: 0 auto;
+      width: 90%; max-width: 400px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; display: block; margin: 0 auto;
     }
     .info-banner {
-      background-color: #fff8e1;
-      color: #ff6f00;
-      padding: 10px;
-      border: 1px dashed #ffcc80;
-      text-align: center;
-      border-radius: 6px;
-      font-weight: bold;
-      margin: 20px 0 10px;
+      background-color: #fff8e1; color: #ff6f00; padding: 10px; border: 1px dashed #ffcc80;
+      text-align: center; border-radius: 6px; font-weight: bold; margin: 20px 0 10px;
     }
     .privacy-box {
-      background-color: #f8f9fa;
-      font-size: 13px;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      margin-bottom: 15px;
+      background-color: #f8f9fa; font-size: 13px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px;
     }
     .submit-btn {
-      width: 100%;
-      background-color: #0077c2;
-      color: #fff;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
+      width: 100%; background-color: #0077c2; color: #fff; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
     }
     .review-slider {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 10px;
-      padding: 20px;
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding: 20px;
     }
-    .review-slide {
-      flex: 0 0 auto;
-      scroll-snap-align: start;
-    }
+    .review-slide { flex: 0 0 auto; scroll-snap-align: start; }
     .review-slide img {
-      width: 300px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 300px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -182,6 +102,7 @@
         </div>
       </div>
 
+      <!-- 이하 폼 그룹, 개인정보, 버튼 등은 기존과 동일 -->
       <div class="section-title">Q. 통신사를 선택해주세요.</div>
       <div class="btn-group" id="carrier-group">
         <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
@@ -239,7 +160,7 @@
   </div>
 
   <script>
-    // 실시간 상담 현황 자동 연동 + 상태색상 + 이모지 + 10초 새로고침 + 관리자 상태변경
+    // 실시간 상담 현황 자동 연동 + 상태색상 + 이모지 + 10초 새로고침 + 관리자 상태변경 (프록시 fetch로)
     const statusOptions = ["상담예약", "상담중", "설치예약", "입금완료"];
     const statusLabel = {
       "상담예약": "🔴 상담예약",
@@ -248,7 +169,7 @@
       "입금완료": "🟢 입금완료"
     };
     function fetchData() {
-      fetch("https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec")
+      fetch("https://abundant-regal-composer.glitch.me/proxy")
         .then(res => res.json())
         .then(data => {
           const tbody = document.getElementById("realtime-body");
@@ -257,7 +178,6 @@
           data.forEach((row, idx) => {
             const tr = document.createElement("tr");
             const status = row.status;
-            // 드롭다운으로 상태 변경
             tr.innerHTML = `
               <td>${row.time}</td>
               <td>${row.name}</td>
@@ -272,7 +192,6 @@
             tbody.appendChild(tr);
           });
 
-          // 이벤트 부착
           document.querySelectorAll('.admin-select').forEach(select => {
             select.addEventListener('change', function(){
               const rowIdx = this.getAttribute('data-row');
@@ -295,7 +214,6 @@
         default: return "";
       }
     }
-
     function statusIcon(status) {
       switch (status) {
         case "상담예약": return "🔴";
@@ -305,20 +223,15 @@
         default: return "";
       }
     }
-
     // 상태 변경 함수 (시트에 PATCH)
     function updateStatus(rowIdx, newStatus) {
-      // rowIdx는 데이터 배열의 순서와 동일(헤더 제외)
       fetch("https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec", {
         method: "POST",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: "update=1&row="+(parseInt(rowIdx)+2)+"&status="+encodeURIComponent(newStatus)
-        // 시트 2행부터 데이터 시작이니 +2
       })
       .then(r => r.text())
-      .then(res => {
-        fetchData();
-      })
+      .then(res => { fetchData(); })
       .catch(() => alert("상태 업데이트 실패"));
     }
 
@@ -346,14 +259,11 @@
         const carrierBtn = document.querySelector('#carrier-group button.active');
         const productBtn = document.querySelector('#product-group button.active');
         const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
-
         if (!name || !phone || !carrierBtn || !productBtn || !agreeChecked) {
           alert("성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.");
           e.preventDefault(); // 전송 중단
           return;
         }
-
-        // 값 동기화
         document.getElementById("carrier").value = carrierBtn.textContent;
         document.getElementById("product").value = productBtn.textContent;
         const addonBtns = document.querySelectorAll('#addons-group button.active');
