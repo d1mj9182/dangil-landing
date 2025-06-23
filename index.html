@@ -3,149 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>당일민족 상당 신청</title>
+  <title>당일민족 상담 신청</title>
   <style>
-    /* 전체 스타일 그대로 유지 */
     body {
       font-family: 'Pretendard', sans-serif;
       background-color: #f9fbfd;
-      margin: 0;
       padding: 20px;
     }
     .container { max-width: 720px; margin: auto; }
-    .banner, .reviews {
-      background-color: #e3f2fd;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 30px;
-      text-align: center;
-      font-weight: bold;
-    }
-    .section-title {
-      font-size: 18px;
-      margin: 25px 0 10px;
-      font-weight: bold;
-    }
-    .realtime {
-      background: #ffffff;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      overflow: hidden;
-      height: 250px;
-      position: relative;
-    }
-    .realtime-inner { height: 100%; overflow: hidden; position: relative; }
-    .realtime table { width: 100%; border-collapse: collapse; }
-    .realtime th {
-      background-color: #e1f5fe;
-      padding: 10px;
-      border: 1px solid #90caf9;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
-    .realtime td {
-      padding: 10px;
-      border: 1px solid #bbdefb;
-      text-align: center;
-    }
-    .realtime thead, .realtime tbody tr {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
-    }
-    .realtime tbody {
+    .form-field { margin-bottom: 20px; }
+    .form-field label {
       display: block;
-      animation: scrollUp 20s linear infinite;
+      margin-bottom: 6px;
+      font-weight: bold;
     }
-    @keyframes scrollUp {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-100%); }
-    }
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .btn-group button {
-      flex: 1 1 calc(50% - 10px);
+    input[type=text], input[type=tel], select {
+      width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #f0f0f0;
+      border-radius: 6px;
+    }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .btn-group button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f0f0f0;
       cursor: pointer;
-      text-align: center;
     }
     .btn-group button.active {
       background-color: #0077c2;
-      color: white;
-      border-color: #0077c2;
-    }
-    .form-field { margin-bottom: 20px; }
-    .form-field label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 6px;
-    }
-    input[type=text], input[type=tel], select {
-      width: 90%;
-      max-width: 400px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      display: block;
-      margin: 0 auto;
-    }
-    .info-banner {
-      background-color: #fff8e1;
-      color: #ff6f00;
-      padding: 10px;
-      border: 1px dashed #ffcc80;
-      text-align: center;
-      border-radius: 6px;
-      font-weight: bold;
-      margin: 20px 0 10px;
-    }
-    .privacy-box {
-      background-color: #f8f9fa;
-      font-size: 13px;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      margin-bottom: 15px;
+      color: #fff;
     }
     .submit-btn {
       width: 100%;
-      background-color: #0077c2;
-      color: #fff;
       padding: 14px;
-      border: none;
-      border-radius: 8px;
       font-size: 16px;
+      background-color: #0077c2;
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
-    .review-slider {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 10px;
-      padding: 20px;
-    }
-    .review-slide {
-      flex: 0 0 auto;
-      scroll-snap-align: start;
-    }
-    .review-slide img {
-      width: 300px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
   </style>
-
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".btn-group button").forEach(btn => {
         btn.addEventListener("click", function () {
           const group = this.parentElement;
@@ -160,88 +63,64 @@
     });
 
     function syncFormValues() {
-      const carrierBtn = document.querySelector('#carrier-group button.active');
-      const productBtn = document.querySelector('#product-group button.active');
-      const addonBtns = document.querySelectorAll('#addons-group button.active');
-
-      document.getElementById("carrier").value = carrierBtn ? carrierBtn.textContent : "";
-      document.getElementById("product").value = productBtn ? productBtn.textContent : "";
-      document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
+      document.getElementById("carrier").value =
+        document.querySelector("#carrier-group button.active")?.textContent || "";
+      document.getElementById("product").value =
+        document.querySelector("#product-group button.active")?.textContent || "";
+      document.getElementById("addons").value = Array.from(document.querySelectorAll("#addons-group button.active"))
+        .map(btn => btn.textContent).join(", ");
     }
   </script>
 </head>
 <body>
   <div class="container">
-    <form method="POST" onsubmit="syncFormValues()" enctype="application/x-www-form-urlencoded"
-      action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGlzIkkamEqbsTYxce6KhGU0KFlSWtYNZgKW3OIRabpdGaiuVPPo/exec">
-      <input type="hidden" name="폼구분" value="v2" />
+    <form method="POST"
+          onsubmit="syncFormValues()"
+          enctype="application/x-www-form-urlencoded"
+          action="https://script.google.com/macros/s/AKfycbyKPoSpmVuH3ewPdmHjdE1ePkE4TAcBiEWssv2A_sdR0oT0MJVUqSGYhk4PJ-OyWjUc/exec">
+      
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
       <input type="hidden" name="addons" id="addons" />
 
-      <div class="banner">
-        <img src="banner.jpg.png" alt="인터넷성지 배너" style="width: 100%; height: auto; border-radius: 10px;" />
-      </div>
-
-      <div class="review-slider">
-        <div class="review-slide"><img src="review1.png.png" alt="후기 1" /></div>
-        <div class="review-slide"><img src="review2.png.png" alt="후기 2" /></div>
-        <div class="review-slide"><img src="review3.png.png" alt="후기 3" /></div>
-        <div class="review-slide"><img src="review4.png.png" alt="후기 4" /></div>
-        <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
-      </div>
-
-      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상당 현황</h2>
-      <div class="realtime">
-        <div class="realtime-inner">
-          <table>
-            <thead>
-              <tr><th>접수일자</th><th>고객명</th><th>상품</th><th>진행상황</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>2025-06-22</td><td>김**</td><td>인터넷+TV</td><td>✅ 개통완료</td></tr>
-              <tr><td>2025-06-22</td><td>이**</td><td>유심</td><td>🚞 설치예약</td></tr>
-              <tr><td>2025-06-22</td><td>박**</td><td>CCTV</td><td>⏳ 상당중</td></tr>
-            </tbody>
-          </table>
+      <div class="form-field">
+        <label>통신사 선택</label>
+        <div class="btn-group" id="carrier-group">
+          <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
+          <button type="button">LG 헬로비전</button><button type="button">KT 스카이라이프</button>
         </div>
       </div>
 
-      <div class="section-title">Q. 통신사를 선택해주세요.</div>
-      <div class="btn-group" id="carrier-group">
-        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
-        <button type="button">LG 헬로비전</button><button type="button">KT 스카일라이프</button>
-      </div>
-
-      <div class="section-title">Q. 상품을 선택해주세요.</div>
-      <div class="btn-group" id="product-group">
-        <button type="button">인터넷</button>
-        <button type="button">인터넷+TV</button>
-        <button type="button">인터넷+TV+집전화</button>
-      </div>
-
-      <div class="section-title">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
-      <div class="btn-group multi" id="addons-group">
-        <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
-      </div>
-
-      <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
-
       <div class="form-field">
-        <label for="name">성함</label>
-        <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required/>
+        <label>상품 선택</label>
+        <div class="btn-group" id="product-group">
+          <button type="button">인터넷</button>
+          <button type="button">인터넷+TV</button>
+          <button type="button">인터넷+TV+집전화</button>
+        </div>
       </div>
 
       <div class="form-field">
-        <label for="phone">연락처</label>
-        <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required/>
+        <label>부가상품 선택 (복수선택 가능)</label>
+        <div class="btn-group multi" id="addons-group">
+          <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
+        </div>
       </div>
 
-      <div class="info-banner">⏰ 24시간 연중무후! 지금 접수하시면 바로 상당 연결됩니다.</div>
+      <div class="form-field">
+        <label>성함</label>
+        <input type="text" name="name" required />
+      </div>
 
       <div class="form-field">
+        <label>연락처</label>
+        <input type="tel" name="phone" required />
+      </div>
+
+      <div class="form-field">
+        <label>상담 희망 시간</label>
         <select name="time" required>
-          <option value="">상당시간 선택 (10시~22시)</option>
+          <option value="">선택해주세요</option>
           <option>10시</option><option>11시</option><option>12시</option>
           <option>13시</option><option>14시</option><option>15시</option>
           <option>16시</option><option>17시</option><option>18시</option>
@@ -249,17 +128,7 @@
         </select>
       </div>
 
-      <div class="privacy-box">
-        <strong>개인정보 수집 및 이용 동의</strong><br/><br/>
-        - 수집 항목: 성함, 연락처, 상당 희망시간, 통신사, 상품정보<br/>
-        - 수집 목적: 서비스 상당 및 가입 안내 제공<br/>
-        - 보유 및 이용기간: 수집일로부터 1년간 보관 후 파기<br/>
-        - 규한은 개인정보 제공에 동의하지 않을 권리가 있으며, 미동의 시 서비스 이용에 제한이 있을 수 있습니다.
-      </div>
-      <label><input type="checkbox" required> 위 내용을 모두 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</label>
-
-      <br><br>
-      <button class="submit-btn" type="submit">상당 신청하기</button>
+      <button type="submit" class="submit-btn">상담 신청하기</button>
     </form>
   </div>
 </body>
