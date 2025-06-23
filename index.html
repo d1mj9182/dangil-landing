@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>당일민족 상당 신청</title>
   <style>
-    /* 너가 준 전체 스타일 그대로 */
+    /* 전체 스타일 그대로 유지 */
     body {
       font-family: 'Pretendard', sans-serif;
       background-color: #f9fbfd;
@@ -157,34 +157,13 @@
           }
         });
       });
-
-      // 실시간 상담현황판 자동 업데이트 (15초 간격)
-      async function loadRealtimeStatus() {
-        try {
-          const res = await fetch("https://opensheet.elk.sh/1mf-0clxIlUdQm-gIpbe-oq0KiZKi03wFYav3IS15FPg/당일민족1");
-          const data = await res.json();
-          const tbody = document.querySelector(".realtime tbody");
-          tbody.innerHTML = "";
-          data.slice(-10).reverse().forEach(row => {
-            const date = new Date(row[0]).toLocaleDateString("ko-KR");
-            const name = row[1]?.replace(/(?<=.)./g, "*") || "";
-            const product = row[4] || "";
-            const status = "⏳ 상당중";
-            const tr = `<tr><td>${date}</td><td>${name}</td><td>${product}</td><td>${status}</td></tr>`;
-            tbody.insertAdjacentHTML("beforeend", tr);
-          });
-        } catch (err) {
-          console.error("실시간 현황 불러오기 실패:", err);
-        }
-      }
-      loadRealtimeStatus();
-      setInterval(loadRealtimeStatus, 15000); // 15초 간격
     });
 
     function syncFormValues() {
       const carrierBtn = document.querySelector('#carrier-group button.active');
       const productBtn = document.querySelector('#product-group button.active');
       const addonBtns = document.querySelectorAll('#addons-group button.active');
+
       document.getElementById("carrier").value = carrierBtn ? carrierBtn.textContent : "";
       document.getElementById("product").value = productBtn ? productBtn.textContent : "";
       document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
@@ -194,16 +173,93 @@
 <body>
   <div class="container">
     <form method="POST" onsubmit="syncFormValues()" enctype="application/x-www-form-urlencoded"
-      action="https://script.google.com/macros/s/AKfycbyKPoSpmVuH3ewPdmHjdE1ePkE4TAcBiEWssv2A_sdR0oT0MJVUqSGYhk4PJ-OyWjUc/exec">
+      action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGlzIkkamEqbsTYxce6KhGU0KFlSWtYNZgKW3OIRabpdGaiuVPPo/exec">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
       <input type="hidden" name="addons" id="addons" />
 
-      <!-- 이하 내용 동일 (배너, 후기슬라이더, 실시간현황, 입력필드 등) -->
-      <!-- 너가 제공한 코드 구조 100% 유지 -->
+      <div class="banner">
+        <img src="banner.jpg.png" alt="인터넷성지 배너" style="width: 100%; height: auto; border-radius: 10px;" />
+      </div>
 
-      <!-- 나머지 생략된 부분은 그대로 붙여넣으면 돼 -->
+      <div class="review-slider">
+        <div class="review-slide"><img src="review1.png.png" alt="후기 1" /></div>
+        <div class="review-slide"><img src="review2.png.png" alt="후기 2" /></div>
+        <div class="review-slide"><img src="review3.png.png" alt="후기 3" /></div>
+        <div class="review-slide"><img src="review4.png.png" alt="후기 4" /></div>
+        <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
+      </div>
+
+      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상당 현황</h2>
+      <div class="realtime">
+        <div class="realtime-inner">
+          <table>
+            <thead>
+              <tr><th>접수일자</th><th>고객명</th><th>상품</th><th>진행상황</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>2025-06-22</td><td>김**</td><td>인터넷+TV</td><td>✅ 개통완료</td></tr>
+              <tr><td>2025-06-22</td><td>이**</td><td>유심</td><td>🚞 설치예약</td></tr>
+              <tr><td>2025-06-22</td><td>박**</td><td>CCTV</td><td>⏳ 상당중</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-title">Q. 통신사를 선택해주세요.</div>
+      <div class="btn-group" id="carrier-group">
+        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
+        <button type="button">LG 헬로비전</button><button type="button">KT 스카일라이프</button>
+      </div>
+
+      <div class="section-title">Q. 상품을 선택해주세요.</div>
+      <div class="btn-group" id="product-group">
+        <button type="button">인터넷</button>
+        <button type="button">인터넷+TV</button>
+        <button type="button">인터넷+TV+집전화</button>
+      </div>
+
+      <div class="section-title">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
+      <div class="btn-group multi" id="addons-group">
+        <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
+      </div>
+
+      <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
+
+      <div class="form-field">
+        <label for="name">성함</label>
+        <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required/>
+      </div>
+
+      <div class="form-field">
+        <label for="phone">연락처</label>
+        <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required/>
+      </div>
+
+      <div class="info-banner">⏰ 24시간 연중무후! 지금 접수하시면 바로 상당 연결됩니다.</div>
+
+      <div class="form-field">
+        <select name="time" required>
+          <option value="">상당시간 선택 (10시~22시)</option>
+          <option>10시</option><option>11시</option><option>12시</option>
+          <option>13시</option><option>14시</option><option>15시</option>
+          <option>16시</option><option>17시</option><option>18시</option>
+          <option>19시</option><option>20시</option><option>21시</option><option>22시</option>
+        </select>
+      </div>
+
+      <div class="privacy-box">
+        <strong>개인정보 수집 및 이용 동의</strong><br/><br/>
+        - 수집 항목: 성함, 연락처, 상당 희망시간, 통신사, 상품정보<br/>
+        - 수집 목적: 서비스 상당 및 가입 안내 제공<br/>
+        - 보유 및 이용기간: 수집일로부터 1년간 보관 후 파기<br/>
+        - 규한은 개인정보 제공에 동의하지 않을 권리가 있으며, 미동의 시 서비스 이용에 제한이 있을 수 있습니다.
+      </div>
+      <label><input type="checkbox" required> 위 내용을 모두 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</label>
+
+      <br><br>
+      <button class="submit-btn" type="submit">상당 신청하기</button>
     </form>
   </div>
 </body>
