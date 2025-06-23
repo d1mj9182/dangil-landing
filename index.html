@@ -142,36 +142,10 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
   </style>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".btn-group button").forEach(btn => {
-        btn.addEventListener("click", function () {
-          const group = this.parentElement;
-          if (group.classList.contains("multi")) {
-            this.classList.toggle("active");
-          } else {
-            group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-            this.classList.add("active");
-          }
-        });
-      });
-    });
-
-    function syncFormValues() {
-      const carrierBtn = document.querySelector('#carrier-group button.active');
-      const productBtn = document.querySelector('#product-group button.active');
-      const addonBtns = document.querySelectorAll('#addons-group button.active');
-
-      document.getElementById("carrier").value = carrierBtn ? carrierBtn.textContent : "";
-      document.getElementById("product").value = productBtn ? productBtn.textContent : "";
-      document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
-    }
-  </script>
 </head>
 <body>
   <div class="container">
-    <form method="POST" onsubmit="syncFormValues()" enctype="application/x-www-form-urlencoded"
+    <form method="POST" enctype="application/x-www-form-urlencoded"
       action="https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
@@ -239,7 +213,7 @@
       <div class="info-banner">⏰ 24시간 연중무휴! 지금 접수하시면 바로 상담 연결됩니다.</div>
 
       <div class="form-field">
-        <select name="time" required>
+        <select name="time">
           <option value="">상담시간 선택 (10시~22시)</option>
           <option>10시</option><option>11시</option><option>12시</option>
           <option>13시</option><option>14시</option><option>15시</option>
@@ -261,5 +235,42 @@
       <button class="submit-btn" type="submit">상담 신청하기</button>
     </form>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".btn-group button").forEach(btn => {
+        btn.addEventListener("click", function () {
+          const group = this.parentElement;
+          if (group.classList.contains("multi")) {
+            this.classList.toggle("active");
+          } else {
+            group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+          }
+        });
+      });
+
+      const form = document.querySelector("form");
+      form.addEventListener("submit", function (e) {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const carrierBtn = document.querySelector('#carrier-group button.active');
+        const productBtn = document.querySelector('#product-group button.active');
+        const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
+
+        if (!name || !phone || !carrierBtn || !productBtn || !agreeChecked) {
+          alert("성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.");
+          e.preventDefault(); // 전송 중단
+          return;
+        }
+
+        // 값 동기화
+        document.getElementById("carrier").value = carrierBtn.textContent;
+        document.getElementById("product").value = productBtn.textContent;
+        const addonBtns = document.querySelectorAll('#addons-group button.active');
+        document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
+      });
+    });
+  </script>
 </body>
 </html>
