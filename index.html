@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>당일민족 상담 신청</title>
   <style>
+    /* 생략 없이 전체 스타일 그대로 유지 */
     body {
       font-family: 'Pretendard', sans-serif;
       background-color: #f9fbfd;
       margin: 0;
       padding: 20px;
     }
-    .container {
-      max-width: 720px;
-      margin: auto;
-    }
+    .container { max-width: 720px; margin: auto; }
     .banner, .reviews {
       background-color: #e3f2fd;
       border-radius: 10px;
@@ -37,15 +35,8 @@
       height: 250px;
       position: relative;
     }
-    .realtime-inner {
-      height: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-    .realtime table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    .realtime-inner { height: 100%; overflow: hidden; position: relative; }
+    .realtime table { width: 100%; border-collapse: collapse; }
     .realtime th {
       background-color: #e1f5fe;
       padding: 10px;
@@ -92,9 +83,7 @@
       color: white;
       border-color: #0077c2;
     }
-    .form-field {
-      margin-bottom: 20px;
-    }
+    .form-field { margin-bottom: 20px; }
     .form-field label {
       font-weight: bold;
       display: block;
@@ -165,22 +154,26 @@
           } else {
             group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
             this.classList.add("active");
-            if (group.id === "carrier-group") document.getElementById("carrier").value = this.textContent;
-            if (group.id === "product-group") document.getElementById("product").value = this.textContent;
-          }
-          if (group.id === "addons-group") {
-            const selected = Array.from(group.querySelectorAll("button.active")).map(b => b.textContent);
-            document.getElementById("addons").value = selected.join(",");
           }
         });
       });
     });
+
+    function syncFormValues() {
+      const carrierBtn = document.querySelector('#carrier-group button.active');
+      const productBtn = document.querySelector('#product-group button.active');
+      const addonBtns = document.querySelectorAll('#addons-group button.active');
+
+      document.getElementById("carrier").value = carrierBtn ? carrierBtn.textContent : "";
+      document.getElementById("product").value = productBtn ? productBtn.textContent : "";
+      document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
+    }
   </script>
 </head>
 <body>
   <div class="container">
-    <form method="POST" enctype="application/x-www-form-urlencoded"
-      action="https://script.google.com/macros/s/AKfycbwKPoSpmVuH3ewPdmHjdE1ePkE4TAcBiEWssv2A_sdR00T0MJVUqSGYhk4PJ-OyWjUc/exec">
+    <form method="POST" onsubmit="syncFormValues()" enctype="application/x-www-form-urlencoded"
+      action="https://script.google.com/macros/s/AKfycbwNFDex4OFQ7hyZHGlzIkkamEqbsTYxce6KhGU0KFlSWtYNZgKW3OIRabpdGaiuVPPo/exec">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
