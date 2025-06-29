@@ -67,7 +67,7 @@
 <body>
   <div class="container">
     <form method="POST" enctype="application/x-www-form-urlencoded"
-      action="https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec">
+      action="https://script.google.com/macros/s/AKfycbySvPtK5XZFumiAjLiH6Pat5qqFFdsJ83fnHUz9Ncbn4IJKX7PJdmLdfPntOvpz8XQu/exec">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
@@ -225,7 +225,7 @@
     }
     // 상태 변경 함수 (시트에 PATCH)
     function updateStatus(rowIdx, newStatus) {
-      fetch("https://script.google.com/macros/s/AKfycbzj87psBAHGd3rad4orSpfVvuLJLTmnndf1ud0VgtODaPhM-UJQPFjhkvSQKoyGgaod/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbySvPtK5XZFumiAjLiH6Pat5qqFFdsJ83fnHUz9Ncbn4IJKX7PJdmLdfPntOvpz8XQu/exec", {
         method: "POST",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: "update=1&row="+(parseInt(rowIdx)+2)+"&status="+encodeURIComponent(newStatus)
