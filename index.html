@@ -36,10 +36,13 @@
     .btn-group button {
       flex: 1 1 calc(50% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 8px; background-color: #f0f0f0;
       cursor: pointer; text-align: center;
+      transition: background 0.2s, color 0.2s;
     }
     .btn-group button.active {
       background-color: #0077c2; color: white; border-color: #0077c2;
     }
+    .btn-group button.tv-extra { border: 2px solid #ff9800; background: #fffde7;}
+    .btn-group button.tv-extra.active { background: #ff9800; color: #fff; border-color: #ff9800;}
     .form-field { margin-bottom: 20px; }
     .form-field label { font-weight: bold; display: block; margin-bottom: 6px; }
     input[type=text], input[type=tel], select {
@@ -48,6 +51,18 @@
     .info-banner {
       background-color: #fff8e1; color: #ff6f00; padding: 10px; border: 1px dashed #ffcc80;
       text-align: center; border-radius: 6px; font-weight: bold; margin: 20px 0 10px;
+    }
+    .notice-box {
+      background: #f3e5f5;
+      color: #6d1b7b;
+      border-left: 6px solid #ab47bc;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 15px;
+      margin-bottom: 15px;
+      margin-top: -12px;
+      line-height: 1.5;
+      font-weight: 600;
     }
     .privacy-box {
       background-color: #f8f9fa; font-size: 13px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px;
@@ -71,6 +86,7 @@
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
+      <input type="hidden" name="tv_extra" id="tv_extra" />
       <input type="hidden" name="addons" id="addons" />
 
       <div class="banner">
@@ -85,7 +101,7 @@
         <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
       </div>
 
-      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황1</h2>
+      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황2</h2>
       <div class="realtime">
         <div class="realtime-inner">
           <table>
@@ -102,18 +118,23 @@
         </div>
       </div>
 
-      <!-- 이하 폼 그룹, 개인정보, 버튼 등은 기존과 동일 -->
-      <div class="section-title">Q. 통신사를 선택해주세요.</div>
-      <div class="btn-group" id="carrier-group">
-        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
-        <button type="button">LG 헬로비전</button><button type="button">KT 스카일라이프</button>
-      </div>
-
       <div class="section-title">Q. 상품을 선택해주세요.</div>
       <div class="btn-group" id="product-group">
         <button type="button">인터넷</button>
         <button type="button">인터넷+TV</button>
         <button type="button">인터넷+TV+집전화</button>
+        <button type="button" class="tv-extra">TV추가</button>
+      </div>
+      <div class="notice-box">
+        인터넷+TV 2대 사용이시거나 TV만 신청하신 고객님은<br>
+        반드시 <span style="color:#0077c2;font-weight:bold;">‘인터넷+TV’</span>와 <span style="color:#ff9800;font-weight:bold;">‘TV추가’</span> 버튼을 함께 선택해주세요.<br>
+        TV만 신청하실 경우 <span style="color:#ff9800;font-weight:bold;">‘TV추가’</span>만 선택하셔도 접수 가능합니다.
+      </div>
+
+      <div class="section-title">Q. 통신사를 선택해주세요.</div>
+      <div class="btn-group" id="carrier-group">
+        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
+        <button type="button">LG 헬로비전</button><button type="button">KT 스카일라이프</button>
       </div>
 
       <div class="section-title">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
@@ -268,10 +289,18 @@
 
     // 기존 버튼 처리 & 입력 검증
     document.addEventListener("DOMContentLoaded", function () {
+      // 복수선택: 부가상품(multi), TV추가(tv-extra)
       document.querySelectorAll(".btn-group button").forEach(btn => {
         btn.addEventListener("click", function () {
           const group = this.parentElement;
-          if (group.classList.contains("multi")) {
+          // "TV추가"만 복수선택
+          if (this.classList.contains("tv-extra")) {
+            this.classList.toggle("active");
+          } else if (group.id === "product-group") {
+            // 다른 상품은 단일선택
+            group.querySelectorAll("button:not(.tv-extra)").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+          } else if (group.classList.contains("multi")) {
             this.classList.toggle("active");
           } else {
             group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
@@ -285,15 +314,20 @@
         const name = document.getElementById("name").value.trim();
         const phone = document.getElementById("phone").value.trim();
         const carrierBtn = document.querySelector('#carrier-group button.active');
-        const productBtn = document.querySelector('#product-group button.active');
+        // 상품 단일선택
+        const productBtn = document.querySelector('#product-group button.active:not(.tv-extra)');
+        // TV추가 복수선택
+        const tvExtraBtn = document.querySelector('#product-group button.tv-extra.active');
         const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
-        if (!name || !phone || !carrierBtn || !productBtn || !agreeChecked) {
-          alert("성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.");
+        // 필수 검증: 상품에서 TV추가만 단독 선택도 가능
+        if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
+          alert("성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)");
           e.preventDefault(); // 전송 중단
           return;
         }
         document.getElementById("carrier").value = carrierBtn.textContent;
-        document.getElementById("product").value = productBtn.textContent;
+        document.getElementById("product").value = productBtn ? productBtn.textContent : "";
+        document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
         const addonBtns = document.querySelectorAll('#addons-group button.active');
         document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
 
