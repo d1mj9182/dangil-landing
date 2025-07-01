@@ -85,7 +85,7 @@
         <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
       </div>
 
-      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황</h2>
+      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황1</h2>
       <div class="realtime">
         <div class="realtime-inner">
           <table>
@@ -160,7 +160,12 @@
   </div>
 
   <script>
-    // 실시간 상담 현황 자동 연동 + 상태색상 + 이모지 + 10초 새로고침 + 관리자 상태변경 (프록시 fetch로)
+    // ===== Airtable 연동 정보 [수정: 본인 정보 입력] =====
+    const AIRTABLE_TOKEN = "YOUR_AIRTABLE_TOKEN"; // [수정] 본인 토큰
+    const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL"; // [수정] Base ID
+    const AIRTABLE_TABLE_NAME = "당일민족1"; // [수정] 테이블명
+
+    // 실시간 상담 현황 Airtable 연동 [수정]
     const statusOptions = ["상담예약", "상담중", "설치예약", "입금완료"];
     const statusLabel = {
       "상담예약": "🔴 상담예약",
@@ -168,41 +173,52 @@
       "설치예약": "🟡 설치예약",
       "입금완료": "🟢 입금완료"
     };
-    function fetchData() {
-      fetch("https://abundant-regal-composer.glitch.me/proxy")
-        .then(res => res.json())
-        .then(data => {
-          const tbody = document.getElementById("realtime-body");
-          tbody.innerHTML = "";
 
-          data.forEach((row, idx) => {
-            const tr = document.createElement("tr");
-            const status = row.status;
-            tr.innerHTML = `
-              <td>${row.time}</td>
-              <td>${row.name}</td>
-              <td>${row.product}</td>
-              <td class="admin-cell">
-                <span class="${statusClass(status)}" style="margin-right:7px;">${statusIcon(status)} ${status}</span>
-                <select class="admin-select" data-row="${idx}">
-                  ${statusOptions.map(opt => `<option value="${opt}" ${opt===status?'selected':''}>${statusLabel[opt]}</option>`).join('')}
-                </select>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-
-          document.querySelectorAll('.admin-select').forEach(select => {
-            select.addEventListener('change', function(){
-              const rowIdx = this.getAttribute('data-row');
-              const newStatus = this.value;
-              updateStatus(rowIdx, newStatus);
-            });
-          });
-        })
-        .catch(() => {
-          document.getElementById("realtime-body").innerHTML = '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
+    async function fetchDataAirtable() {
+      try {
+        const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?sort[][field]=접수일자&sort[][direction]=desc&maxRecords=10`, {
+          headers: { Authorization: "Bearer " + AIRTABLE_TOKEN }
         });
+        const data = await res.json();
+        const tbody = document.getElementById("realtime-body");
+        tbody.innerHTML = "";
+        if (!data.records || !data.records.length) {
+          tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
+          return;
+        }
+        data.records.forEach((record, idx) => {
+          const row = record.fields;
+          const status = row["진행상황"] || "상담예약";
+          const id = record.id;
+          const time = row["접수일자"] || "";
+          const name = row["고객명"] || "";
+          const product = row["상품"] || "";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${time}</td>
+            <td>${name}</td>
+            <td>${product}</td>
+            <td class="admin-cell">
+              <span class="${statusClass(status)}" style="margin-right:7px;">${statusIcon(status)} ${status}</span>
+              <select class="admin-select" data-id="${id}">
+                ${statusOptions.map(opt => `<option value="${opt}" ${opt===status?'selected':''}>${statusLabel[opt]}</option>`).join('')}
+              </select>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        document.querySelectorAll('.admin-select').forEach(select => {
+          select.addEventListener('change', async function(){
+            const id = this.getAttribute('data-id');
+            const newStatus = this.value;
+            await updateStatusAirtable(id, newStatus);
+            fetchDataAirtable();
+          });
+        });
+      } catch (e) {
+        document.getElementById("realtime-body").innerHTML = '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
+      }
     }
 
     function statusClass(status) {
@@ -223,20 +239,32 @@
         default: return "";
       }
     }
-    // 상태 변경 함수 (시트에 PATCH)
-    function updateStatus(rowIdx, newStatus) {
-      fetch("https://script.google.com/macros/s/AKfycbySvPtK5XZFumiAjLiH6Pat5qqFFdsJ83fnHUz9Ncbn4IJKX7PJdmLdfPntOvpz8XQu/exec", {
-        method: "POST",
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: "update=1&row="+(parseInt(rowIdx)+2)+"&status="+encodeURIComponent(newStatus)
-      })
-      .then(r => r.text())
-      .then(res => { fetchData(); })
-      .catch(() => alert("상태 업데이트 실패"));
+
+    // Airtable 상태 업데이트 (PATCH)
+    async function updateStatusAirtable(id, newStatus) {
+      await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + AIRTABLE_TOKEN,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ fields: { "진행상황": newStatus } })
+      });
     }
 
-    fetchData();
-    setInterval(fetchData, 10000);
+    // 실시간 현황 15초 간격 새로고침
+    fetchDataAirtable();
+    setInterval(fetchDataAirtable, 15000);
+
+    // [추가] SNS 문자 전송(예시, 실제 구현은 서버 연동 필요)
+    async function sendSms(phone, msg) {
+      // 실제 사용시 아래 fetch를 본인 SENS 서버로 수정
+      await fetch("YOUR_SENS_API_ENDPOINT", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: phone, msg: msg })
+      });
+    }
 
     // 기존 버튼 처리 & 입력 검증
     document.addEventListener("DOMContentLoaded", function () {
@@ -268,6 +296,9 @@
         document.getElementById("product").value = productBtn.textContent;
         const addonBtns = document.querySelectorAll('#addons-group button.active');
         document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
+
+        // [추가] 상담 신청시 SNS 문자 발송 예시 (필요 시 주석 해제)
+        // sendSms(phone, `[당일민족] ${name}님, 상담신청이 접수되었습니다.`); 
       });
     });
   </script>
