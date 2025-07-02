@@ -9,13 +9,33 @@
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
     .container { max-width: 720px; margin: auto; }
 
-    /* 배너 크게 */
+    /* 배너 크게 및 비율 맞춤 */
     .banner img {
       width: 100%;
       height: auto;
       border-radius: 10px;
-      max-height: 250px;
+      max-height: none;
+      aspect-ratio: 1920 / 640;
       object-fit: cover;
+      max-height: 300px;
+    }
+
+    /* 후기 섹션 제목 */
+    .review-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    /* 후기 슬라이더 전체 테두리 및 배경 */
+    .review-slider-wrapper {
+      border: 3px solid #ab47bc; /* 1번째 사진 색상 */
+      border-radius: 14px;
+      padding: 10px;
+      margin: 20px 0 30px;
+      background-color: #f3e5f5;
     }
 
     /* 후기 슬라이더 */
@@ -41,10 +61,15 @@
       width: 300px;
       height: 200px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(181, 94, 224, 0.7); /* 2번째 사진 색감 */
       position: relative;
       cursor: pointer;
       overflow: hidden;
+      border: 3px solid #b55ee0; /* 2번째 사진 색상 */
+      transition: box-shadow 0.3s ease;
+    }
+    .review-slide:hover {
+      box-shadow: 0 0 20px rgba(181, 94, 224, 1);
     }
     .review-slide img {
       width: 100%;
@@ -56,14 +81,8 @@
     .review-slide:hover img {
       transform: scale(1.05);
     }
-    .review-touch-hint {
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-      margin-top: -12px;
-      margin-bottom: 30px;
-      font-style: italic;
-    }
+
+    /* 후기 아래 영문 텍스트 삭제 요청으로 아예 CSS 제거 */
 
     /* 후기 팝업 큰 화면 */
     #review-popup {
@@ -81,7 +100,7 @@
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(255,215,0,0.8);
     }
-    #review-popup.close-area {
+    #review-popup .close-area {
       position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
     }
 
@@ -90,7 +109,7 @@
       background: #fff; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;
       max-height: 360px; /* 높이 증가 */
       position: relative;
-      font-size: 16px;
+      font-size: 18px; /* 폰트 크기 키움 */
     }
     .realtime-inner {
       height: 100%;
@@ -112,15 +131,15 @@
       table-layout: fixed;
     }
     .realtime th {
-      background-color: #004d99; /* 진한 파랑 */
-      color: #ffd700; /* 금색 */
+      background-color: #000000; /* 검정색 */
+      color: #ffd700; /* 금빛색 */
       padding: 12px 8px;
       border: 1px solid #ccc;
       position: sticky;
       top: 0;
       z-index: 10;
-      font-weight: bold;
-      font-size: 16px;
+      font-weight: 900; /* 두껍게 */
+      font-size: 20px; /* 크기 증가 */
     }
     .realtime td {
       padding: 12px 8px;
@@ -292,6 +311,9 @@
         width: 220px;
         height: 160px;
       }
+      .banner img {
+        max-height: 180px;
+      }
     }
 
     /* 이름 암호화: 가운데만 * */
@@ -314,14 +336,16 @@
         <img src="banner.jpg.png" alt="인터넷성지 배너" />
       </div>
 
-      <div class="review-slider" aria-label="Customer Reviews Slider">
-        <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
-        <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
-        <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
-        <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
-        <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
+      <div class="review-title">실제 후기</div>
+      <div class="review-slider-wrapper">
+        <div class="review-slider" aria-label="Customer Reviews Slider">
+          <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
+          <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
+          <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
+          <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
+          <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
+        </div>
       </div>
-      <div class="review-touch-hint">Swipe left or right to see more reviews →</div>
 
       <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황</h2>
       <div class="realtime">
