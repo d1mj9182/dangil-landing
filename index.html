@@ -10,6 +10,13 @@
     .container { max-width: 720px; margin: auto; }
 
     /* 배너 크게 및 비율 맞춤 */
+    .banner {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 20;
+      padding-bottom: 10px;
+    }
     .banner img {
       width: 100%;
       height: auto;
@@ -20,22 +27,23 @@
       max-height: 300px;
     }
 
-    /* 후기 섹션 제목 */
-    .review-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 10px;
-      text-align: center;
+    /* 실제 후기 영역 스타일 */
+    .review-section {
+      background-color: #fffde7; /* 연한 노랑 배경 */
+      border: 3px solid #ff9800; /* 오렌지색 */
+      border-radius: 14px;
+      padding: 15px 10px 10px 10px;
+      box-shadow: 0 0 15px rgba(255, 152, 0, 0.6); /* 오렌지톤 그림자 */
+      margin: 20px 0 30px;
     }
 
-    /* 후기 슬라이더 전체 테두리 및 배경 */
-    .review-slider-wrapper {
-      border: 3px solid #ab47bc; /* 1번째 사진 색상 */
-      border-radius: 14px;
-      padding: 10px;
-      margin: 20px 0 30px;
-      background-color: #f3e5f5;
+    /* 후기 섹션 제목 */
+    .review-title {
+      font-size: 25px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
     /* 후기 슬라이더 */
@@ -44,15 +52,15 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       gap: 10px;
-      padding: 20px 0;
+      padding: 10px 0 20px 0;
       scrollbar-width: thin;
-      scrollbar-color: #0077c2 #eee;
+      scrollbar-color: #ff9800 #eee;
     }
     .review-slider::-webkit-scrollbar {
       height: 8px;
     }
     .review-slider::-webkit-scrollbar-thumb {
-      background: #0077c2;
+      background: #ff9800;
       border-radius: 4px;
     }
     .review-slide {
@@ -61,15 +69,16 @@
       width: 300px;
       height: 200px;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(181, 94, 224, 0.7); /* 2번째 사진 색감 */
+      box-shadow: 0 0 10px rgba(255, 152, 0, 0.7);
       position: relative;
       cursor: pointer;
       overflow: hidden;
-      border: 3px solid #b55ee0; /* 2번째 사진 색상 */
+      border: 3px solid #ff9800;
       transition: box-shadow 0.3s ease;
+      background-color: #fffde7;
     }
     .review-slide:hover {
-      box-shadow: 0 0 20px rgba(181, 94, 224, 1);
+      box-shadow: 0 0 20px rgba(255, 152, 0, 1);
     }
     .review-slide img {
       width: 100%;
@@ -81,8 +90,6 @@
     .review-slide:hover img {
       transform: scale(1.05);
     }
-
-    /* 후기 아래 영문 텍스트 삭제 요청으로 아예 CSS 제거 */
 
     /* 후기 팝업 큰 화면 */
     #review-popup {
@@ -104,19 +111,47 @@
       position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
     }
 
+    /* 실시간 상담 현황 영역 스타일 */
+    .realtime-section {
+      background-color: #fff;
+      border: 3px solid #000;
+      border-radius: 14px;
+      padding: 10px 10px 10px 10px; /* 위쪽 padding 줄여서 글자 위치 위로 조정 */
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+      font-size: 25px;
+      color: #000;
+      position: relative;
+    }
+
+    /* 실시간 상담 현황 제목 위치 조정 (더 위로) */
+    .realtime-section > h2 {
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 12px 0;
+      padding-top: 2px;
+      line-height: 1.1;
+    }
+
     /* 실시간 상담 현황 */
     .realtime {
-      background: #fff; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;
-      max-height: 360px; /* 높이 증가 */
+      max-height: 360px;
       position: relative;
-      font-size: 18px; /* 폰트 크기 키움 */
+      font-size: 25px;
+      overflow: hidden;
     }
+
     .realtime-inner {
-      height: 100%;
-      overflow-y: auto;
+      height: 280px;
+      overflow: hidden;
       position: relative;
       scrollbar-width: thin;
       scrollbar-color: #0077c2 #f1f1f1;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+    .realtime-inner:hover {
+      overflow-y: auto;
     }
     .realtime-inner::-webkit-scrollbar {
       width: 8px;
@@ -125,21 +160,62 @@
       background-color: #0077c2;
       border-radius: 4px;
     }
+
+    /* 애니메이션: 기록들이 아래로 부드럽게 내려오도록 변경 */
+    .realtime-table-body {
+      display: block;
+      animation: scrollDown 30s linear infinite;
+      will-change: transform;
+    }
+    .realtime-table-body:hover {
+      animation-play-state: paused;
+      overflow-y: auto;
+      max-height: 280px;
+      display: block;
+    }
+    @keyframes scrollDown {
+      0% {
+        transform: translateY(calc(-100% + 7 * 52px));
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
     .realtime table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
     }
-    .realtime th {
-      background-color: #000000; /* 검정색 */
-      color: #ffd700; /* 금빛색 */
-      padding: 12px 8px;
-      border: 1px solid #ccc;
+    .realtime thead, .realtime tbody {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+    .realtime thead tr {
+      display: table-row;
+    }
+    .realtime tbody.realtime-table-body tr {
+      display: table-row;
+    }
+    .realtime thead {
+      /* 헤더 고정 */
       position: sticky;
       top: 0;
+      background: #000;
+      color: #ffd700;
+      font-weight: 900;
+      font-size: 20px;
       z-index: 10;
-      font-weight: 900; /* 두껍게 */
-      font-size: 20px; /* 크기 증가 */
+      border: 1px solid #ccc;
+    }
+
+    .realtime th {
+      padding: 12px 8px;
+      border: 1px solid #ccc;
+      text-align: center;
     }
     .realtime td {
       padding: 12px 8px;
@@ -147,18 +223,20 @@
       text-align: center;
       vertical-align: middle;
       word-break: break-word;
+      color: #000;
     }
+
     /* 컬럼 너비 비율 */
-    .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 20%; } /* 접수일자 2/1 */
-    .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 20%; } /* 고객명 */
-    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; font-size: 18px; } /* 상품명 2배크기 */
-    .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 20%; } /* 진행상황 */
+    .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 20%; }
+    .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 20%; }
+    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; font-size: 18px; }
+    .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 20%; }
 
     /* 진행상황 행,열 사이즈 줄임 */
     .admin-cell {
       min-width: 140px;
       padding: 6px !important;
-      font-size: 14px;
+      font-size: 18px;
     }
 
     .status-red { color: red; font-weight: bold; }
@@ -168,11 +246,18 @@
 
     .admin-select {
       padding: 4px 6px;
-      font-size: 14px;
+      font-size: 18px;
       border-radius: 6px;
       border: 1px solid #ccc;
       margin-left: 6px;
       min-width: 90px;
+    }
+
+    /* 절취선 스타일 분리선 - 너비 100%로 변경 */
+    .section-separator {
+      border-top: 2px dashed #ccc;
+      margin: 20px 0 30px 0;
+      width: 100%;
     }
 
     /* 버튼 그룹 */
@@ -191,7 +276,7 @@
       cursor: pointer;
       text-align: center;
       transition: background 0.2s, color 0.2s;
-      font-size: 16px;
+      font-size: 20px;
     }
     .btn-group button.active {
       background-color: #0077c2;
@@ -201,11 +286,13 @@
     .btn-group button.tv-extra {
       border: 2px solid #ff9800;
       background: #fffde7;
+      box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
     }
     .btn-group button.tv-extra.active {
       background: #ff9800;
       color: #fff;
       border-color: #ff9800;
+      box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
     }
 
     /* 폼 필드 */
@@ -253,6 +340,7 @@
       margin-top: -12px;
       line-height: 1.5;
       font-weight: 600;
+      transition: font-size 0.3s ease;
     }
 
     /* 개인정보 박스 */
@@ -284,23 +372,32 @@
     /* 반응형: 모바일 */
     @media (max-width: 600px) {
       body {
-        font-size: 14px;
+        font-size: 18px;
         padding: 10px;
       }
       .realtime table {
-        font-size: 13px;
+        font-size: 20px;
       }
       .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 25%; }
       .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 25%; }
-      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 35%; font-size: 14px; }
-      .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 15%; }
+      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 35%; font-size: 18px; }
+      .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 30%; }
+      .admin-cell {
+        font-size: 20px;
+      }
+      .admin-select {
+        font-size: 20px;
+      }
       .btn-group button {
-        font-size: 14px;
+        font-size: 18px;
         padding: 8px;
+      }
+      .notice-box {
+        font-size: 13px;
       }
       input[type=text], input[type=tel], select {
         width: 95%;
-        font-size: 14px;
+        font-size: 16px;
         padding: 8px;
       }
       .submit-btn {
@@ -308,8 +405,9 @@
         padding: 12px;
       }
       .review-slide {
-        width: 220px;
-        height: 160px;
+        width: 140px;
+        height: 100px;
+        border-width: 2px;
       }
       .banner img {
         max-height: 180px;
@@ -325,29 +423,25 @@
 </head>
 <body>
   <div class="container">
-    <form id="applicationForm" autocomplete="off">
-      <input type="hidden" name="폼구분" value="v2" />
-      <input type="hidden" name="carrier" id="carrier" />
-      <input type="hidden" name="product" id="product" />
-      <input type="hidden" name="tv_extra" id="tv_extra" />
-      <input type="hidden" name="addons" id="addons" />
+    <div class="banner">
+      <img src="form_banner_1600_400.png" alt="인터넷성지 배너" />
+    </div>
 
-      <div class="banner">
-        <img src="banner.jpg.png" alt="인터넷성지 배너" />
+    <div class="review-section">
+      <div class="review-title">💬 실제 후기</div>
+      <div class="review-slider" aria-label="Customer Reviews Slider">
+        <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
       </div>
+    </div>
 
-      <div class="review-title">실제 후기</div>
-      <div class="review-slider-wrapper">
-        <div class="review-slider" aria-label="Customer Reviews Slider">
-          <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
-        </div>
-      </div>
+    <div class="section-separator"></div>
 
-      <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황</h2>
+    <div class="realtime-section">
+      <h2>💬 실시간 상담 현황</h2>
       <div class="realtime">
         <div class="realtime-inner" id="realtime-inner">
           <table>
@@ -357,14 +451,24 @@
                 <th class="admin-cell">진행상황<br /><span style="font-weight:normal;font-size:13px;color:#ddd;">(관리자 변경)</span></th>
               </tr>
             </thead>
-            <tbody id="realtime-body">
+            <tbody class="realtime-table-body" id="realtime-body">
               <tr><td colspan="4">데이터를 불러오는 중...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
+    </div>
 
-      <div class="section-title">Q. 상품을 선택해주세요.</div>
+    <div class="section-separator"></div>
+
+    <form id="applicationForm" autocomplete="off">
+      <input type="hidden" name="폼구분" value="v2" />
+      <input type="hidden" name="carrier" id="carrier" />
+      <input type="hidden" name="product" id="product" />
+      <input type="hidden" name="tv_extra" id="tv_extra" />
+      <input type="hidden" name="addons" id="addons" />
+
+      <div class="section-title" style="font-size:20px;">Q. 상품을 선택해주세요.</div>
       <div class="btn-group" id="product-group">
         <button type="button">인터넷</button>
         <button type="button">인터넷+TV</button>
@@ -377,13 +481,13 @@
         TV만 신청하실 경우 <span style="color:#ff9800;font-weight:bold;">‘TV추가’</span>만 선택하셔도 접수 가능합니다.
       </div>
 
-      <div class="section-title">Q. 통신사를 선택해주세요.</div>
+      <div class="section-title" style="font-size:20px;">Q. 통신사를 선택해주세요.</div>
       <div class="btn-group" id="carrier-group">
         <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
         <button type="button">LG 헬로비전</button><button type="button">KT 스카일라이프</button>
       </div>
 
-      <div class="section-title">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
+      <div class="section-title" style="font-size:20px;">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
       <div class="btn-group multi" id="addons-group">
         <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
       </div>
@@ -459,7 +563,11 @@
           tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
           return;
         }
-        data.records.forEach((record) => {
+
+        // 50개 이상 데이터 애니메이션 고려해서 50개만 자름
+        const limitedRecords = data.records.slice(0, 50);
+
+        limitedRecords.forEach((record) => {
           const row = record.fields;
           const status = row["진행상황"] || "상담예약";
           const id = record.id;
@@ -469,7 +577,14 @@
 
           // 관리자 모드가 아니면 드롭다운 제거, 텍스트만 노출
           const statusDisplay = isAdmin
-            ? `<select class="admin-select" data-id="${id}">${["상담예약","상담중","설치예약","입금완료"].map(opt => `<option value="${opt}" ${opt === status ? "selected" : ""}>${status}</option>`).join("")}</select>`
+            ? `<select class="admin-select" data-id="${id}">
+                ${["상담예약","상담중","설치예약","입금완료"].map(opt => {
+                  if (opt === "상담중" && status !== "상담예약" && status !== "설치예약" && status !== "입금완료") {
+                    return `<option value="상담중" selected>상담중</option>`;
+                  }
+                  return `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`;
+                }).join("")}
+              </select>`
             : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
 
           const tr = document.createElement("tr");
@@ -482,7 +597,6 @@
           tbody.appendChild(tr);
         });
 
-        // 관리자 모드면 드롭다운 이벤트 바인딩
         if (isAdmin) {
           document.querySelectorAll(".admin-select").forEach((select) => {
             select.addEventListener("change", async function () {
@@ -545,9 +659,7 @@
     fetchDataAirtable();
     setInterval(fetchDataAirtable, 15000);
 
-    // 버튼 처리 및 폼 검증
     document.addEventListener("DOMContentLoaded", function () {
-      // 상품, 통신사, 부가상품 버튼 토글 처리
       document.querySelectorAll(".btn-group button").forEach((btn) => {
         btn.addEventListener("click", function () {
           const group = this.parentElement;
@@ -569,7 +681,6 @@
         });
       });
 
-      // 폼 제출 처리
       const form = document.getElementById("applicationForm");
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
