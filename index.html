@@ -29,15 +29,14 @@
 
     /* 실제 후기 영역 스타일 */
     .review-section {
-      background-color: #fffde7; /* 연한 노랑 배경 */
-      border: 3px solid #ff9800; /* 오렌지색 */
+      background-color: #fffde7;
+      border: 3px solid #ff9800;
       border-radius: 14px;
       padding: 15px 10px 10px 10px;
-      box-shadow: 0 0 15px rgba(255, 152, 0, 0.6); /* 오렌지톤 그림자 */
+      box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
       margin: 20px 0 30px;
     }
 
-    /* 후기 섹션 제목 */
     .review-title {
       font-size: 25px;
       font-weight: 700;
@@ -46,7 +45,6 @@
       text-align: center;
     }
 
-    /* 후기 슬라이더 */
     .review-slider {
       display: flex;
       overflow-x: auto;
@@ -91,7 +89,6 @@
       transform: scale(1.05);
     }
 
-    /* 후기 팝업 큰 화면 */
     #review-popup {
       display: none;
       position: fixed;
@@ -111,12 +108,11 @@
       position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
     }
 
-    /* 실시간 상담 현황 영역 스타일 */
     .realtime-section {
       background-color: #fff;
       border: 3px solid #000;
       border-radius: 14px;
-      padding: 10px 10px 10px 10px; /* 위쪽 padding 줄여서 글자 위치 위로 조정 */
+      padding: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.15);
       margin-bottom: 20px;
       font-size: 25px;
@@ -124,7 +120,6 @@
       position: relative;
     }
 
-    /* 실시간 상담 현황 제목 위치 조정 (더 위로) */
     .realtime-section > h2 {
       font-weight: 700;
       text-align: center;
@@ -133,7 +128,6 @@
       line-height: 1.1;
     }
 
-    /* 실시간 상담 현황 */
     .realtime {
       max-height: 360px;
       position: relative;
@@ -161,27 +155,7 @@
       border-radius: 4px;
     }
 
-    /* 애니메이션: 기록들이 아래로 부드럽게 내려오도록 변경 */
-    .realtime-table-body {
-      display: block;
-      animation: scrollDown 30s linear infinite;
-      will-change: transform;
-    }
-    .realtime-table-body:hover {
-      animation-play-state: paused;
-      overflow-y: auto;
-      max-height: 280px;
-      display: block;
-    }
-    @keyframes scrollDown {
-      0% {
-        transform: translateY(calc(-100% + 7 * 52px));
-      }
-      100% {
-        transform: translateY(0);
-      }
-    }
-
+    /* 테이블 및 애니메이션 */
     .realtime table {
       width: 100%;
       border-collapse: collapse;
@@ -197,11 +171,18 @@
     .realtime thead tr {
       display: table-row;
     }
-    .realtime tbody.realtime-table-body tr {
-      display: table-row;
+    .realtime tbody.realtime-table-body {
+      display: block;
+      animation: scrollLoop 60s linear infinite;
+      will-change: transform;
+    }
+    .realtime tbody.realtime-table-body:hover {
+      animation-play-state: paused;
+      overflow-y: auto;
+      max-height: 280px;
+      display: block;
     }
     .realtime thead {
-      /* 헤더 고정 */
       position: sticky;
       top: 0;
       background: #000;
@@ -211,7 +192,6 @@
       z-index: 10;
       border: 1px solid #ccc;
     }
-
     .realtime th {
       padding: 12px 8px;
       border: 1px solid #ccc;
@@ -226,13 +206,12 @@
       color: #000;
     }
 
-    /* 컬럼 너비 비율 */
+    /* 컬럼 너비 */
     .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 20%; }
     .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 20%; }
     .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; font-size: 18px; }
     .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 20%; }
 
-    /* 진행상황 행,열 사이즈 줄임 */
     .admin-cell {
       min-width: 140px;
       padding: 6px !important;
@@ -253,7 +232,7 @@
       min-width: 90px;
     }
 
-    /* 절취선 스타일 분리선 - 너비 100%로 변경 */
+    /* 절취선 100% 너비 */
     .section-separator {
       border-top: 2px dashed #ccc;
       margin: 20px 0 30px 0;
@@ -315,7 +294,6 @@
       font-size: 16px;
     }
 
-    /* 인포 배너 */
     .info-banner {
       background-color: #fff8e1;
       color: #ff6f00;
@@ -328,7 +306,6 @@
       font-size: 16px;
     }
 
-    /* 공지 박스 */
     .notice-box {
       background: #f3e5f5;
       color: #6d1b7b;
@@ -343,7 +320,6 @@
       transition: font-size 0.3s ease;
     }
 
-    /* 개인정보 박스 */
     .privacy-box {
       background-color: #f8f9fa;
       font-size: 14px;
@@ -353,7 +329,6 @@
       margin-bottom: 15px;
     }
 
-    /* 제출 버튼 */
     .submit-btn {
       width: 100%;
       background-color: #0077c2;
@@ -369,7 +344,6 @@
       background-color: #005999;
     }
 
-    /* 반응형: 모바일 */
     @media (max-width: 600px) {
       body {
         font-size: 18px;
@@ -414,10 +388,19 @@
       }
     }
 
-    /* 이름 암호화: 가운데만 * */
     .masked-name {
       letter-spacing: 2px;
       font-weight: 700;
+    }
+
+    /* 무한 스크롤 애니메이션 */
+    @keyframes scrollLoop {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(calc(-50%));
+      }
     }
   </style>
 </head>
@@ -540,10 +523,8 @@
     const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL";
     const AIRTABLE_TABLE_NAME = "당일민족1";
 
-    // URL에 admin=true 붙으면 관리자 모드 활성화
     const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
 
-    // 이름 마스킹 함수 (앞1글자, 뒷1글자 제외 중간 *로)
     function maskName(name) {
       if (!name) return "";
       if (name.length <= 2) return name[0] + "*";
@@ -564,18 +545,18 @@
           return;
         }
 
-        // 50개 이상 데이터 애니메이션 고려해서 50개만 자름
         const limitedRecords = data.records.slice(0, 50);
+        // 원본 + 복제 데이터 붙이기 (무한 스크롤용)
+        const combinedRecords = [...limitedRecords, ...limitedRecords];
 
-        limitedRecords.forEach((record) => {
+        combinedRecords.forEach((record, idx) => {
           const row = record.fields;
           const status = row["진행상황"] || "상담예약";
-          const id = record.id;
+          const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
           const time = row["접수일자"] || "";
           const name = maskName(row["고객명"] || "");
           const product = row["상품"] || "";
 
-          // 관리자 모드가 아니면 드롭다운 제거, 텍스트만 노출
           const statusDisplay = isAdmin
             ? `<select class="admin-select" data-id="${id}">
                 ${["상담예약","상담중","설치예약","입금완료"].map(opt => {
@@ -602,7 +583,7 @@
             select.addEventListener("change", async function () {
               const id = this.getAttribute("data-id");
               const newStatus = this.value;
-              await updateStatusAirtable(id, newStatus);
+              await updateStatusAirtable(id.replace("_dup", ""), newStatus);
               fetchDataAirtable();
             });
           });
@@ -615,30 +596,20 @@
 
     function statusClass(status) {
       switch (status) {
-        case "상담예약":
-          return "status-red";
-        case "상담중":
-          return "status-orange";
-        case "설치예약":
-          return "status-yellow";
-        case "입금완료":
-          return "status-green";
-        default:
-          return "";
+        case "상담예약": return "status-red";
+        case "상담중": return "status-orange";
+        case "설치예약": return "status-yellow";
+        case "입금완료": return "status-green";
+        default: return "";
       }
     }
     function statusIcon(status) {
       switch (status) {
-        case "상담예약":
-          return "🔴";
-        case "상담중":
-          return "🟠";
-        case "설치예약":
-          return "🟡";
-        case "입금완료":
-          return "🟢";
-        default:
-          return "";
+        case "상담예약": return "🔴";
+        case "상담중": return "🟠";
+        case "설치예약": return "🟡";
+        case "입금완료": return "🟢";
+        default: return "";
       }
     }
 
@@ -756,7 +727,6 @@
       });
     });
 
-    // 후기 팝업 제어
     const reviewPopup = document.getElementById("review-popup");
     const reviewPopupImg = reviewPopup.querySelector("img");
     const closeArea = reviewPopup.querySelector(".close-area");
