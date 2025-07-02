@@ -2,56 +2,227 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>당일민족 상담 신청</title>
   <style>
-    body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px;}
+    /* 전체 폰트 크기 + Pretendard */
+    body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
     .container { max-width: 720px; margin: auto; }
-    .banner, .reviews {
-      background-color: #e3f2fd; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center; font-weight: bold;
+
+    /* 배너 크게 */
+    .banner img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      max-height: 250px;
+      object-fit: cover;
     }
-    .section-title { font-size: 18px; margin: 25px 0 10px; font-weight: bold; }
+
+    /* 후기 슬라이더 */
+    .review-slider {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 10px;
+      padding: 20px 0;
+      scrollbar-width: thin;
+      scrollbar-color: #0077c2 #eee;
+    }
+    .review-slider::-webkit-scrollbar {
+      height: 8px;
+    }
+    .review-slider::-webkit-scrollbar-thumb {
+      background: #0077c2;
+      border-radius: 4px;
+    }
+    .review-slide {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      width: 300px;
+      height: 200px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .review-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+    .review-slide:hover img {
+      transform: scale(1.05);
+    }
+    .review-touch-hint {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-top: -12px;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    /* 후기 팝업 큰 화면 */
+    #review-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #review-popup img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,215,0,0.8);
+    }
+    #review-popup.close-area {
+      position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
+    }
+
+    /* 실시간 상담 현황 */
     .realtime {
-      background: #fff; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; max-height: 250px; position: relative;
+      background: #fff; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;
+      max-height: 360px; /* 높이 증가 */
+      position: relative;
+      font-size: 16px;
     }
-    .realtime-inner { height: 100%; overflow: hidden; position: relative; }
-    .realtime table { width: 100%; border-collapse: collapse; }
+    .realtime-inner {
+      height: 100%;
+      overflow-y: auto;
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: #0077c2 #f1f1f1;
+    }
+    .realtime-inner::-webkit-scrollbar {
+      width: 8px;
+    }
+    .realtime-inner::-webkit-scrollbar-thumb {
+      background-color: #0077c2;
+      border-radius: 4px;
+    }
+    .realtime table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
     .realtime th {
-      background-color: #e1f5fe; padding: 10px; border: 1px solid #90caf9; position: sticky; top: 0; z-index: 2;
+      background-color: #004d99; /* 진한 파랑 */
+      color: #ffd700; /* 금색 */
+      padding: 12px 8px;
+      border: 1px solid #ccc;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      font-weight: bold;
+      font-size: 16px;
     }
     .realtime td {
-      padding: 10px; border: 1px solid #bbdefb; text-align: center;
+      padding: 12px 8px;
+      border: 1px solid #ddd;
+      text-align: center;
+      vertical-align: middle;
+      word-break: break-word;
     }
+    /* 컬럼 너비 비율 */
+    .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 20%; } /* 접수일자 2/1 */
+    .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 20%; } /* 고객명 */
+    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; font-size: 18px; } /* 상품명 2배크기 */
+    .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 20%; } /* 진행상황 */
+
+    /* 진행상황 행,열 사이즈 줄임 */
+    .admin-cell {
+      min-width: 140px;
+      padding: 6px !important;
+      font-size: 14px;
+    }
+
     .status-red { color: red; font-weight: bold; }
     .status-orange { color: orange; font-weight: bold; }
     .status-yellow { color: #fbc02d; font-weight: bold; }
     .status-green { color: green; font-weight: bold; }
+
     .admin-select {
-      padding: 4px 6px; font-size: 15px; border-radius: 6px; border: 1px solid #ccc; margin-left: 6px;
+      padding: 4px 6px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-left: 6px;
+      min-width: 90px;
     }
-    .admin-cell { min-width: 170px; }
+
+    /* 버튼 그룹 */
     .btn-group {
-      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
     }
     .btn-group button {
-      flex: 1 1 calc(50% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 8px; background-color: #f0f0f0;
-      cursor: pointer; text-align: center;
+      flex: 1 1 calc(50% - 10px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      text-align: center;
       transition: background 0.2s, color 0.2s;
+      font-size: 16px;
     }
     .btn-group button.active {
-      background-color: #0077c2; color: white; border-color: #0077c2;
+      background-color: #0077c2;
+      color: white;
+      border-color: #0077c2;
     }
-    .btn-group button.tv-extra { border: 2px solid #ff9800; background: #fffde7;}
-    .btn-group button.tv-extra.active { background: #ff9800; color: #fff; border-color: #ff9800;}
-    .form-field { margin-bottom: 20px; }
-    .form-field label { font-weight: bold; display: block; margin-bottom: 6px; }
+    .btn-group button.tv-extra {
+      border: 2px solid #ff9800;
+      background: #fffde7;
+    }
+    .btn-group button.tv-extra.active {
+      background: #ff9800;
+      color: #fff;
+      border-color: #ff9800;
+    }
+
+    /* 폼 필드 */
+    .form-field {
+      margin-bottom: 20px;
+    }
+    .form-field label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
     input[type=text], input[type=tel], select {
-      width: 90%; max-width: 400px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; display: block; margin: 0 auto;
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto;
+      font-size: 16px;
     }
+
+    /* 인포 배너 */
     .info-banner {
-      background-color: #fff8e1; color: #ff6f00; padding: 10px; border: 1px dashed #ffcc80;
-      text-align: center; border-radius: 6px; font-weight: bold; margin: 20px 0 10px;
+      background-color: #fff8e1;
+      color: #ff6f00;
+      padding: 10px;
+      border: 1px dashed #ffcc80;
+      text-align: center;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 20px 0 10px;
+      font-size: 16px;
     }
+
+    /* 공지 박스 */
     .notice-box {
       background: #f3e5f5;
       color: #6d1b7b;
@@ -64,18 +235,69 @@
       line-height: 1.5;
       font-weight: 600;
     }
+
+    /* 개인정보 박스 */
     .privacy-box {
-      background-color: #f8f9fa; font-size: 13px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px;
+      background-color: #f8f9fa;
+      font-size: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
     }
+
+    /* 제출 버튼 */
     .submit-btn {
-      width: 100%; background-color: #0077c2; color: #fff; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
+      width: 100%;
+      background-color: #0077c2;
+      color: #fff;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-    .review-slider {
-      display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding: 20px;
+    .submit-btn:hover {
+      background-color: #005999;
     }
-    .review-slide { flex: 0 0 auto; scroll-snap-align: start; }
-    .review-slide img {
-      width: 300px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+    /* 반응형: 모바일 */
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+        padding: 10px;
+      }
+      .realtime table {
+        font-size: 13px;
+      }
+      .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 25%; }
+      .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 25%; }
+      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 35%; font-size: 14px; }
+      .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 15%; }
+      .btn-group button {
+        font-size: 14px;
+        padding: 8px;
+      }
+      input[type=text], input[type=tel], select {
+        width: 95%;
+        font-size: 14px;
+        padding: 8px;
+      }
+      .submit-btn {
+        font-size: 16px;
+        padding: 12px;
+      }
+      .review-slide {
+        width: 220px;
+        height: 160px;
+      }
+    }
+
+    /* 이름 암호화: 가운데만 * */
+    .masked-name {
+      letter-spacing: 2px;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -89,25 +311,26 @@
       <input type="hidden" name="addons" id="addons" />
 
       <div class="banner">
-        <img src="banner.jpg.png" alt="인터넷성지 배너" style="width: 100%; height: auto; border-radius: 10px;" />
+        <img src="banner.jpg.png" alt="인터넷성지 배너" />
       </div>
 
-      <div class="review-slider">
-        <div class="review-slide"><img src="review1.png.png" alt="후기 1" /></div>
-        <div class="review-slide"><img src="review2.png.png" alt="후기 2" /></div>
-        <div class="review-slide"><img src="review3.png.png" alt="후기 3" /></div>
-        <div class="review-slide"><img src="review4.png.png" alt="후기 4" /></div>
-        <div class="review-slide"><img src="review5.png.png" alt="후기 5" /></div>
+      <div class="review-slider" aria-label="Customer Reviews Slider">
+        <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
       </div>
+      <div class="review-touch-hint">Swipe left or right to see more reviews →</div>
 
       <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 10px; color: #0077c2;">💬 실시간 상담 현황</h2>
       <div class="realtime">
-        <div class="realtime-inner">
+        <div class="realtime-inner" id="realtime-inner">
           <table>
             <thead>
               <tr>
                 <th>접수일자</th><th>고객명</th><th>상품</th>
-                <th class="admin-cell">진행상황<br><span style="font-weight:normal;font-size:13px;color:#777;">(관리자 변경)</span></th>
+                <th class="admin-cell">진행상황<br /><span style="font-weight:normal;font-size:13px;color:#ddd;">(관리자 변경)</span></th>
               </tr>
             </thead>
             <tbody id="realtime-body">
@@ -125,8 +348,8 @@
         <button type="button" class="tv-extra">TV추가</button>
       </div>
       <div class="notice-box">
-        인터넷+TV 2대 신청이시거나 TV만 신청하신 고객님은<br>
-        반드시 <span style="color:#0077c2;font-weight:bold;">‘인터넷+TV’</span>와 <span style="color:#ff9800;font-weight:bold;">‘TV추가’</span> 버튼을 함께 선택해주세요.<br>
+        인터넷+TV 2대 신청이시거나 TV만 신청하신 고객님은<br />
+        반드시 <span style="color:#0077c2;font-weight:bold;">‘인터넷+TV’</span>와 <span style="color:#ff9800;font-weight:bold;">‘TV추가’</span> 버튼을 함께 선택해주세요.<br />
         TV만 신청하실 경우 <span style="color:#ff9800;font-weight:bold;">‘TV추가’</span>만 선택하셔도 접수 가능합니다.
       </div>
 
@@ -145,12 +368,12 @@
 
       <div class="form-field">
         <label for="name">성함</label>
-        <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required/>
+        <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required />
       </div>
 
       <div class="form-field">
         <label for="phone">연락처</label>
-        <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required/>
+        <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required />
       </div>
 
       <div class="info-banner">⏰ 24시간 연중무휴! 지금 접수하시면 바로 상담 연결됩니다.</div>
@@ -166,39 +389,45 @@
       </div>
 
       <div class="privacy-box">
-        <strong>개인정보 수집 및 이용 동의</strong><br/><br/>
-        - 수집 항목: 성함, 연락처, 상담 희망시간, 통신사, 상품정보<br/>
-        - 수집 목적: 서비스 상담 및 가입 안내 제공<br/>
-        - 보유 및 이용기간: 수집일로부터 1년간 보관 후 파기<br/>
+        <strong>개인정보 수집 및 이용 동의</strong><br /><br />
+        - 수집 항목: 성함, 연락처, 상담 희망시간, 통신사, 상품정보<br />
+        - 수집 목적: 서비스 상담 및 가입 안내 제공<br />
+        - 보유 및 이용기간: 수집일로부터 1년간 보관 후 파기<br />
         - 귀하는 개인정보 제공에 동의하지 않을 권리가 있으며, 미동의 시 서비스 이용에 제한이 있을 수 있습니다.
       </div>
-      <label><input type="checkbox" required> 위 내용을 모두 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</label>
+      <label><input type="checkbox" required /> 위 내용을 모두 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</label>
 
-      <br><br>
+      <br /><br />
       <button class="submit-btn" type="submit">상담 신청하기</button>
     </form>
   </div>
 
+  <div id="review-popup" aria-hidden="true">
+    <div class="close-area" tabindex="0" role="button" aria-label="Close review popup"></div>
+    <img src="" alt="Review large view" />
+  </div>
+
   <script>
-    // ===== Airtable 연동 정보 [수정: 본인 정보 입력] =====
     const AIRTABLE_TOKEN = "patsLgTBSt5CorHUB.5bb3ba67450d67ac9da759726724d4c3af2d3b8534c9b9aa595a331d382fba3b";
     const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL";
     const AIRTABLE_TABLE_NAME = "당일민족1";
 
-    // 실시간 상담 현황 Airtable 연동
-    const statusOptions = ["상담예약", "상담중", "설치예약", "입금완료"];
-    const statusLabel = {
-      "상담예약": "🔴 상담예약",
-      "상담중": "🟠 상담중",
-      "설치예약": "🟡 설치예약",
-      "입금완료": "🟢 입금완료"
-    };
+    // URL에 admin=true 붙으면 관리자 모드 활성화
+    const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
+
+    // 이름 마스킹 함수 (앞1글자, 뒷1글자 제외 중간 *로)
+    function maskName(name) {
+      if (!name) return "";
+      if (name.length <= 2) return name[0] + "*";
+      return name[0] + "*".repeat(name.length - 2) + name[name.length - 1];
+    }
 
     async function fetchDataAirtable() {
       try {
-        const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?sort[][field]=접수일자&sort[][direction]=desc&maxRecords=10`, {
-          headers: { Authorization: "Bearer " + AIRTABLE_TOKEN }
-        });
+        const res = await fetch(
+          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?sort[][field]=접수일자&sort[][direction]=desc&maxRecords=50`,
+          { headers: { Authorization: "Bearer " + AIRTABLE_TOKEN } }
+        );
         const data = await res.json();
         const tbody = document.getElementById("realtime-body");
         tbody.innerHTML = "";
@@ -206,154 +435,182 @@
           tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
           return;
         }
-        data.records.forEach((record, idx) => {
+        data.records.forEach((record) => {
           const row = record.fields;
           const status = row["진행상황"] || "상담예약";
           const id = record.id;
           const time = row["접수일자"] || "";
-          const name = row["고객명"] || "";
+          const name = maskName(row["고객명"] || "");
           const product = row["상품"] || "";
+
+          // 관리자 모드가 아니면 드롭다운 제거, 텍스트만 노출
+          const statusDisplay = isAdmin
+            ? `<select class="admin-select" data-id="${id}">${["상담예약","상담중","설치예약","입금완료"].map(opt => `<option value="${opt}" ${opt === status ? "selected" : ""}>${status}</option>`).join("")}</select>`
+            : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
+
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${time}</td>
-            <td>${name}</td>
+            <td class="masked-name">${name}</td>
             <td>${product}</td>
-            <td class="admin-cell">
-              <span class="${statusClass(status)}" style="margin-right:7px;">${statusIcon(status)} ${status}</span>
-              <select class="admin-select" data-id="${id}">
-                ${statusOptions.map(opt => `<option value="${opt}" ${opt===status?'selected':''}>${statusLabel[opt]}</option>`).join('')}
-              </select>
-            </td>
+            <td class="admin-cell">${statusDisplay}</td>
           `;
           tbody.appendChild(tr);
         });
 
-        document.querySelectorAll('.admin-select').forEach(select => {
-          select.addEventListener('change', async function(){
-            const id = this.getAttribute('data-id');
-            const newStatus = this.value;
-            await updateStatusAirtable(id, newStatus);
-            fetchDataAirtable();
+        // 관리자 모드면 드롭다운 이벤트 바인딩
+        if (isAdmin) {
+          document.querySelectorAll(".admin-select").forEach((select) => {
+            select.addEventListener("change", async function () {
+              const id = this.getAttribute("data-id");
+              const newStatus = this.value;
+              await updateStatusAirtable(id, newStatus);
+              fetchDataAirtable();
+            });
           });
-        });
+        }
       } catch (e) {
-        document.getElementById("realtime-body").innerHTML = '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
+        document.getElementById("realtime-body").innerHTML =
+          '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
       }
     }
 
     function statusClass(status) {
       switch (status) {
-        case "상담예약": return "status-red";
-        case "상담중": return "status-orange";
-        case "설치예약": return "status-yellow";
-        case "입금완료": return "status-green";
-        default: return "";
+        case "상담예약":
+          return "status-red";
+        case "상담중":
+          return "status-orange";
+        case "설치예약":
+          return "status-yellow";
+        case "입금완료":
+          return "status-green";
+        default:
+          return "";
       }
     }
     function statusIcon(status) {
       switch (status) {
-        case "상담예약": return "🔴";
-        case "상담중": return "🟠";
-        case "설치예약": return "🟡";
-        case "입금완료": return "🟢";
-        default: return "";
+        case "상담예약":
+          return "🔴";
+        case "상담중":
+          return "🟠";
+        case "설치예약":
+          return "🟡";
+        case "입금완료":
+          return "🟢";
+        default:
+          return "";
       }
     }
 
-    // Airtable 상태 업데이트 (PATCH)
     async function updateStatusAirtable(id, newStatus) {
-      await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: "Bearer " + AIRTABLE_TOKEN,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ fields: { "진행상황": newStatus } })
-      });
+      await fetch(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: "Bearer " + AIRTABLE_TOKEN,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fields: { 진행상황: newStatus } }),
+        }
+      );
     }
 
-    // 실시간 현황 15초 간격 새로고침
     fetchDataAirtable();
     setInterval(fetchDataAirtable, 15000);
 
-    // 기존 버튼 처리 & 입력 검증 및 Airtable 신청 연동
+    // 버튼 처리 및 폼 검증
     document.addEventListener("DOMContentLoaded", function () {
-      // 복수선택: 부가상품(multi), TV추가(tv-extra)
-      document.querySelectorAll(".btn-group button").forEach(btn => {
+      // 상품, 통신사, 부가상품 버튼 토글 처리
+      document.querySelectorAll(".btn-group button").forEach((btn) => {
         btn.addEventListener("click", function () {
           const group = this.parentElement;
-          // "TV추가"만 복수선택
           if (this.classList.contains("tv-extra")) {
             this.classList.toggle("active");
           } else if (group.id === "product-group") {
-            // 다른 상품은 단일선택
-            group.querySelectorAll("button:not(.tv-extra)").forEach(b => b.classList.remove("active"));
+            group.querySelectorAll("button:not(.tv-extra)").forEach((b) =>
+              b.classList.remove("active")
+            );
             this.classList.add("active");
           } else if (group.classList.contains("multi")) {
             this.classList.toggle("active");
           } else {
-            group.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+            group.querySelectorAll("button").forEach((b) =>
+              b.classList.remove("active")
+            );
             this.classList.add("active");
           }
         });
       });
 
+      // 폼 제출 처리
       const form = document.getElementById("applicationForm");
       form.addEventListener("submit", async function (e) {
-        e.preventDefault(); // 기본 전송 중단
+        e.preventDefault();
+
         const name = document.getElementById("name").value.trim();
         const phone = document.getElementById("phone").value.trim();
-        const carrierBtn = document.querySelector('#carrier-group button.active');
-        // 상품 단일선택
-        const productBtn = document.querySelector('#product-group button.active:not(.tv-extra)');
-        // TV추가 복수선택
-        const tvExtraBtn = document.querySelector('#product-group button.tv-extra.active');
+        const carrierBtn = document.querySelector("#carrier-group button.active");
+        const productBtn = document.querySelector(
+          "#product-group button.active:not(.tv-extra)"
+        );
+        const tvExtraBtn = document.querySelector(
+          "#product-group button.tv-extra.active"
+        );
         const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
         const time = document.getElementById("time").value;
 
-        // 필수 검증: 상품에서 TV추가만 단독 선택도 가능
         if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
-          alert("성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)");
+          alert(
+            "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
+          );
           return;
         }
+
         document.getElementById("carrier").value = carrierBtn.textContent;
         document.getElementById("product").value = productBtn ? productBtn.textContent : "";
         document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
-        const addonBtns = document.querySelectorAll('#addons-group button.active');
-        document.getElementById("addons").value = Array.from(addonBtns).map(btn => btn.textContent).join(',');
+        const addonBtns = document.querySelectorAll("#addons-group button.active");
+        document.getElementById("addons").value = Array.from(addonBtns)
+          .map((btn) => btn.textContent)
+          .join(",");
 
-        // Airtable에 데이터 전송
         const payload = {
           fields: {
-            "접수일자": new Date().toISOString().slice(0, 19).replace('T', ' '),
-            "고객명": name,
-            "연락처": phone,
-            "통신사": carrierBtn.textContent,
-            "상품": productBtn ? productBtn.textContent : "",
-            "부가상품": Array.from(addonBtns).map(btn => btn.textContent).join(','),
-            "상담시간": time,
-            "진행상황": "상담예약",
-            "TV추가": tvExtraBtn ? "TV추가" : ""
-          }
+            접수일자: new Date().toISOString().slice(0, 19).replace("T", " "),
+            고객명: name,
+            연락처: phone,
+            통신사: carrierBtn.textContent,
+            상품: productBtn ? productBtn.textContent : "",
+            부가상품: Array.from(addonBtns).map((btn) => btn.textContent).join(","),
+            상담시간: time,
+            진행상황: "상담예약",
+            TV추가: tvExtraBtn ? "TV추가" : "",
+          },
         };
 
         try {
           const res = await fetch(
-            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
+            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
+              AIRTABLE_TABLE_NAME
+            )}`,
             {
               method: "POST",
               headers: {
                 Authorization: "Bearer " + AIRTABLE_TOKEN,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify(payload)
+              body: JSON.stringify(payload),
             }
           );
           if (res.ok) {
             alert("상담 신청이 정상적으로 접수되었습니다!");
             form.reset();
-            // 버튼 active 초기화
-            document.querySelectorAll(".btn-group button.active").forEach(btn=>btn.classList.remove("active"));
+            document
+              .querySelectorAll(".btn-group button.active")
+              .forEach((btn) => btn.classList.remove("active"));
             fetchDataAirtable();
           } else {
             alert("접수 중 오류가 발생했습니다. 다시 시도해 주세요.");
@@ -362,6 +619,35 @@
           alert("접수 중 네트워크 오류가 발생했습니다.");
         }
       });
+    });
+
+    // 후기 팝업 제어
+    const reviewPopup = document.getElementById("review-popup");
+    const reviewPopupImg = reviewPopup.querySelector("img");
+    const closeArea = reviewPopup.querySelector(".close-area");
+
+    document.querySelectorAll(".review-slide").forEach((slide) => {
+      slide.addEventListener("click", () => {
+        reviewPopupImg.src = slide.querySelector("img").src;
+        reviewPopupImg.alt = slide.querySelector("img").alt;
+        reviewPopup.style.display = "flex";
+        reviewPopup.setAttribute("aria-hidden", "false");
+        reviewPopup.focus();
+      });
+    });
+
+    closeArea.addEventListener("click", () => {
+      reviewPopup.style.display = "none";
+      reviewPopup.setAttribute("aria-hidden", "true");
+      reviewPopupImg.src = "";
+    });
+
+    closeArea.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+        reviewPopup.style.display = "none";
+        reviewPopup.setAttribute("aria-hidden", "true");
+        reviewPopupImg.src = "";
+      }
     });
   </script>
 </body>
