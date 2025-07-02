@@ -130,14 +130,14 @@
     }
 
     .realtime {
-      max-height: 280px;  /* 5명 정도 보이도록 충분한 높이 */
+      max-height: 350px;  /* 5명 정도 보이도록 충분한 높이로 증가 */
       position: relative;
       font-size: 25px;
       overflow: hidden;
     }
 
     .realtime-inner {
-      height: 280px; /* realtime과 동일 높이 */
+      height: 350px; /* realtime과 동일 높이로 증가 */
       overflow: hidden;
       position: relative;
       scrollbar-width: thin;
@@ -180,7 +180,7 @@
     .realtime tbody.realtime-table-body:hover {
       animation-play-state: paused;
       overflow-y: auto;
-      max-height: 280px;
+      max-height: 350px;
       display: block;
     }
     .realtime thead {
@@ -351,17 +351,18 @@
         padding: 10px;
       }
       .realtime table {
-        font-size: 20px;
+        font-size: 16px !important; /* 모바일에서 폰트 축소 */
       }
       .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 25%; }
       .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 25%; }
-      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 35%; font-size: 18px; }
+      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 35%; font-size: 14px !important; }
       .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 30%; }
       .admin-cell {
-        font-size: 20px;
+        font-size: 14px !important;
+        padding: 6px !important;
       }
       .admin-select {
-        font-size: 20px;
+        font-size: 14px !important;
       }
       .btn-group button {
         font-size: 18px;
@@ -554,7 +555,13 @@
           const row = record.fields;
           const status = row["진행상황"] || "상담예약";
           const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
-          const time = row["접수일자"] || "";
+
+          // 접수일자에서 시간 제외하고 날짜만 YYYY-MM-DD 형식으로 자름
+          let time = row["접수일자"] || "";
+          if(time.length >= 10){
+            time = time.slice(0,10);
+          }
+
           const name = maskName(row["고객명"] || "");
           const product = row["상품"] || "";
 
