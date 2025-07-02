@@ -12,11 +12,15 @@
     .form-title {
       font-size: 25px !important;
       font-weight: 700;
-      color: #111 !important;
       margin-bottom: 10px;
       text-align: center;
       letter-spacing: -1px;
       text-shadow: none;
+    }
+    .review-title {
+      color: #fff !important; /* 후기 타이틀 화이트로 변경 */
+      position: relative;
+      z-index: 1;
     }
     .review-section {
       background: #000;
@@ -40,7 +44,6 @@
       mask-composite: exclude;
       pointer-events: none;
     }
-    .review-title { position: relative; z-index: 1; }
     .review-slider {
       display: flex;
       overflow-x: auto;
@@ -118,6 +121,65 @@
     #review-popup .close-area {
       position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
     }
+    .banner {
+      width: 100%;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 3px 18px 0 #f3e8c1aa;
+    }
+    .banner img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border-radius: 20px;
+      max-width: 100%;
+      min-width: 0;
+    }
+    @media (max-width: 900px) {
+      .banner img { height: 130px; }
+    }
+    @media (max-width: 600px) {
+      .review-section { border-width: 0 !important; }
+      .realtime-section { border-width: 2px !important; }
+      .realtime { max-height: 350px; height: 350px; }
+      .realtime-inner { height: 350px; }
+      .realtime table { width: 100%; }
+      .realtime thead, .realtime tbody { display: block; width: 100%; }
+      .realtime thead tr { display: table-row; }
+      .realtime tbody.realtime-table-body { display: block; width: 100%; }
+      .realtime tr { display: table; table-layout: fixed; width: 100%; }
+      .realtime th, .realtime td {
+        display: table-cell;
+        padding: 4px 2px !important;
+        height: 18px !important;
+        font-size: 15px !important;
+        width: 25% !important;
+        box-sizing: border-box;
+      }
+      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40% !important; }
+      .admin-cell span { font-size: 6.5px !important; }
+      .admin-cell { font-size: 12px !important; padding: 4px 2px !important; }
+      .admin-select { font-size: 12px !important; }
+      .btn-group button { font-size: 14px; padding: 6px; }
+      .notice-box { font-size: 12px; }
+      input[type=text], input[type=tel], select {
+        width: 95%;
+        font-size: 13px;
+        padding: 7px;
+      }
+      .submit-btn { font-size: 13px; padding: 9px; }
+      .review-slide { width: 140px; height: 100px; }
+      .review-slide img { border: none !important; }
+      .banner img {
+        height: 100px;
+        border-radius: 14px;
+      }
+      .review-title, .realtime-section > h2, .form-title { font-size: 25px !important; }
+    }
     .realtime-section {
       background-color: #fff;
       border: 3px solid #000;
@@ -143,18 +205,14 @@
       scrollbar-width: thin;
       scrollbar-color: #0077c2 #f1f1f1;
     }
-    .realtime-inner:hover tbody {
-      animation-play-state: paused !important;
-    }
+    .realtime-inner:hover tbody { animation-play-state: paused !important; }
     .realtime-inner tbody {
       display: table-row-group;
       animation: scrollLoop linear infinite;
       animation-duration: 25s;
       will-change: transform;
     }
-    .realtime-inner tbody.paused {
-      animation-play-state: paused !important;
-    }
+    .realtime-inner tbody.paused { animation-play-state: paused !important; }
     @keyframes scrollLoop {
       0% { transform: translateY(0); }
       100% { transform: translateY(-50%); }
@@ -300,50 +358,6 @@
       transition: background-color 0.3s ease;
     }
     .submit-btn:hover { background-color: #005999; }
-    @media (max-width: 600px) {
-      .review-section { border-width: 0 !important; }
-      .realtime-section { border-width: 2px !important; }
-      .realtime { max-height: 350px; height: 350px; }
-      .realtime-inner { height: 350px; }
-      .realtime table { width: 100%; }
-      .realtime thead, .realtime tbody { display: block; width: 100%; }
-      .realtime thead tr { display: table-row; }
-      .realtime tbody.realtime-table-body { display: block; width: 100%; }
-      .realtime tr { display: table; table-layout: fixed; width: 100%; }
-      .realtime th, .realtime td {
-        display: table-cell;
-        padding: 4px 2px !important;
-        height: 18px !important;
-        font-size: 15px !important;
-        width: 25% !important;
-        box-sizing: border-box;
-      }
-      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40% !important; }
-      .admin-cell span { font-size: 6.5px !important; }
-      .admin-cell { font-size: 12px !important; padding: 4px 2px !important; }
-      .admin-select { font-size: 12px !important; }
-      .btn-group button { font-size: 14px; padding: 6px; }
-      .notice-box { font-size: 12px; }
-      input[type=text], input[type=tel], select {
-        width: 95%;
-        font-size: 13px;
-        padding: 7px;
-      }
-      .submit-btn { font-size: 13px; padding: 9px; }
-      .review-slide { width: 140px; height: 100px; }
-      .review-slide img { border: none !important; }
-      .banner img {
-        width: 100vw;
-        max-width: none;
-        height: 200px;
-        object-fit: cover;
-        object-position: center top;
-        display: block;
-        margin: 0 -20px 0 -20px;
-        border-radius: 0 0 32px 32px;
-      }
-      .review-title, .realtime-section > h2, .form-title { font-size: 25px !important; }
-    }
     .masked-name { letter-spacing: 2px; font-weight: 700; }
   </style>
 </head>
