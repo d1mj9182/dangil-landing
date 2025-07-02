@@ -7,21 +7,17 @@
   <style>
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
     .container { max-width: 720px; margin: auto; }
-
-    /* 타이틀 폰트/색상 */
     .review-title,
     .realtime-section > h2,
     .form-title {
       font-size: 25px !important;
       font-weight: 700;
-      color: #fff !important;
+      color: #111 !important;
       margin-bottom: 10px;
       text-align: center;
       letter-spacing: -1px;
-      text-shadow: 0 1px 8px #222, 0 0 4px #000;
+      text-shadow: none;
     }
-
-    /* === 실제 후기 영역 === */
     .review-section {
       background: #000;
       border-radius: 16px;
@@ -44,13 +40,12 @@
       mask-composite: exclude;
       pointer-events: none;
     }
-    .review-title { color: #fff !important; position: relative; z-index: 1; }
-
+    .review-title { position: relative; z-index: 1; }
     .review-slider {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      gap: 10px;
+      gap: 24px;
       padding: 10px 0 20px 0;
       scrollbar-width: thin;
       scrollbar-color: #ffd700 #111;
@@ -59,32 +54,36 @@
     }
     .review-slider::-webkit-scrollbar { height: 8px; }
     .review-slider::-webkit-scrollbar-thumb { background: #ffd700; border-radius: 4px; }
-
     .review-slide {
       flex: 0 0 auto;
       scroll-snap-align: start;
       width: 300px;
       height: 200px;
       border-radius: 15px;
-      background: #000;
+      background: #111;
       position: relative;
       cursor: pointer;
       overflow: hidden;
-      border: 3px solid transparent;
+      border: 1.5px solid transparent;
       margin-bottom: 5px;
-      box-shadow:
-        0 0 0 4px #fff6bf,
-        0 0 0 8px #ffd700,
-        0 0 24px 2px #ffd70088,
-        0 0 2px #fff6bf;
-      transition: box-shadow 0.3s;
+      z-index: 1;
     }
-    .review-slide:hover {
-      box-shadow:
-        0 0 0 6px #fff6bf,
-        0 0 0 12px #ffd700cc,
-        0 0 32px 5px #ffd700dd,
-        0 0 12px #fff6bfcc;
+    .review-slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+      pointer-events: none;
+      z-index: 2;
+      border: 1.5px solid transparent;
+      background: linear-gradient(120deg, #fff6bf 0%, #ffd700 45%, #ffb300 70%, #fff6bf 100%);
+      opacity: 0.7;
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      box-sizing: border-box;
     }
     .review-slide img {
       width: 100%;
@@ -96,9 +95,10 @@
       display: block;
       background: #222;
       transition: transform 0.3s;
+      z-index: 3;
+      position: relative;
     }
     .review-slide:hover img { transform: scale(1.05); }
-
     #review-popup {
       display: none;
       position: fixed;
@@ -118,8 +118,6 @@
     #review-popup .close-area {
       position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
     }
-
-    /* === 실시간 상담 현황 === */
     .realtime-section {
       background-color: #fff;
       border: 3px solid #000;
@@ -140,38 +138,40 @@
     }
     .realtime-inner {
       height: 700px;
-      overflow-y: auto;
+      overflow-y: hidden;
       position: relative;
       scrollbar-width: thin;
       scrollbar-color: #0077c2 #f1f1f1;
     }
-    .realtime-inner::-webkit-scrollbar { width: 8px; }
-    .realtime-inner::-webkit-scrollbar-thumb { background-color: #0077c2; border-radius: 4px; }
-
+    .realtime-inner:hover tbody {
+      animation-play-state: paused !important;
+    }
+    .realtime-inner tbody {
+      display: table-row-group;
+      animation: scrollLoop linear infinite;
+      animation-duration: 25s;
+      will-change: transform;
+    }
+    .realtime-inner tbody.paused {
+      animation-play-state: paused !important;
+    }
+    @keyframes scrollLoop {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
     .realtime table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
     }
     .realtime thead, .realtime tbody {
-      display: table;
       width: 100%;
       table-layout: fixed;
       border-spacing: 0;
       border-collapse: collapse;
     }
     .realtime thead tr { display: table-row; }
-    .realtime tbody.realtime-table-body {
-      display: block;
-      animation: scrollLoop 60s linear infinite;
-      will-change: transform;
-    }
-    .realtime tbody.realtime-table-body:hover {
-      animation-play-state: paused;
-      overflow-y: auto;
-      max-height: 700px;
-      display: block;
-    }
+    .realtime tbody.realtime-table-body { display: table-row-group; }
     .realtime thead {
       position: sticky;
       top: 0;
@@ -191,24 +191,28 @@
       text-align: center;
       background: none !important;
       color: #ffd700 !important;
+      font-size: 18px;
+      width: 20%;
+      word-break: break-all;
+      vertical-align: middle;
     }
     .realtime td {
+      color: #111 !important;
+      background: #fff;
       padding: 12px 8px;
       border: 1px solid #ddd;
       text-align: center;
       vertical-align: middle;
       word-break: break-word;
-      color: #000;
+      font-size: 18px;
     }
-    .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 20%; }
-    .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 20%; }
-    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; font-size: 18px; }
-    .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 20%; }
+    .realtime td.admin-cell { color: inherit; }
+    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; }
     .admin-cell { min-width: 140px; padding: 6px !important; font-size: 18px; }
-    .status-red { color: red; font-weight: bold; }
-    .status-orange { color: orange; font-weight: bold; }
-    .status-yellow { color: #fbc02d; font-weight: bold; }
-    .status-green { color: green; font-weight: bold; }
+    .status-red { color: red !important; font-weight: bold; }
+    .status-orange { color: orange !important; font-weight: bold; }
+    .status-yellow { color: #fbc02d !important; font-weight: bold; }
+    .status-green { color: green !important; font-weight: bold; }
     .admin-select {
       padding: 4px 6px;
       font-size: 18px;
@@ -217,13 +221,11 @@
       margin-left: 6px;
       min-width: 90px;
     }
-
     .section-separator {
       border-top: 2px dashed #ccc;
       margin: 20px 0 30px 0;
       width: 100%;
     }
-
     .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
     .btn-group button {
       flex: 1 1 calc(50% - 10px);
@@ -237,7 +239,6 @@
       font-size: 20px;
     }
     .btn-group button.active { background-color: #0077c2; color: white; border-color: #0077c2; }
-    /* TV추가 버튼 원복 */
     .btn-group button.tv-extra {
       border: 2px solid #ff9800;
       background: #fffde7;
@@ -250,13 +251,11 @@
       border-color: #ff9800;
       box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
     }
-
     .form-field { margin-bottom: 20px; }
     .form-field label { font-weight: bold; display: block; margin-bottom: 6px; }
     input[type=text], input[type=tel], select {
       width: 90%; max-width: 400px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; display: block; margin: 0 auto; font-size: 16px;
     }
-
     .info-banner {
       background-color: #fff8e1;
       color: #ff6f00;
@@ -268,7 +267,6 @@
       margin: 20px 0 10px;
       font-size: 16px;
     }
-
     .notice-box {
       background: #f3e5f5;
       color: #6d1b7b;
@@ -282,7 +280,6 @@
       font-weight: 600;
       transition: font-size 0.3s ease;
     }
-
     .privacy-box {
       background-color: #f8f9fa;
       font-size: 14px;
@@ -291,7 +288,6 @@
       border: 1px solid #ddd;
       margin-bottom: 15px;
     }
-
     .submit-btn {
       width: 100%;
       background-color: #0077c2;
@@ -304,19 +300,25 @@
       transition: background-color 0.3s ease;
     }
     .submit-btn:hover { background-color: #005999; }
-
-    /* 모바일 전용 스타일 */
     @media (max-width: 600px) {
       .review-section { border-width: 0 !important; }
       .realtime-section { border-width: 2px !important; }
       .realtime { max-height: 350px; height: 350px; }
       .realtime-inner { height: 350px; }
+      .realtime table { width: 100%; }
+      .realtime thead, .realtime tbody { display: block; width: 100%; }
+      .realtime thead tr { display: table-row; }
+      .realtime tbody.realtime-table-body { display: block; width: 100%; }
+      .realtime tr { display: table; table-layout: fixed; width: 100%; }
       .realtime th, .realtime td {
+        display: table-cell;
         padding: 4px 2px !important;
         height: 18px !important;
-        font-size: 16px !important;
+        font-size: 15px !important;
+        width: 25% !important;
+        box-sizing: border-box;
       }
-      .realtime th:nth-child(4), .realtime td:nth-child(4) { font-size: 16px !important; }
+      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40% !important; }
       .admin-cell span { font-size: 6.5px !important; }
       .admin-cell { font-size: 12px !important; padding: 4px 2px !important; }
       .admin-select { font-size: 12px !important; }
@@ -328,13 +330,12 @@
         padding: 7px;
       }
       .submit-btn { font-size: 13px; padding: 9px; }
-      .review-slide { width: 140px; height: 100px; border: none !important; }
+      .review-slide { width: 140px; height: 100px; }
       .review-slide img { border: none !important; }
-      /* 배너를 화면 전체 너비에, 인물 중심으로 크게! */
       .banner img {
         width: 100vw;
         max-width: none;
-        height: 230px;
+        height: 200px;
         object-fit: cover;
         object-position: center top;
         display: block;
@@ -343,9 +344,7 @@
       }
       .review-title, .realtime-section > h2, .form-title { font-size: 25px !important; }
     }
-
     .masked-name { letter-spacing: 2px; font-weight: 700; }
-    @keyframes scrollLoop { 0% { transform: translateY(0); } 100% { transform: translateY(calc(-50%)); } }
   </style>
 </head>
 <body>
@@ -363,9 +362,7 @@
         <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
       </div>
     </div>
-
     <div class="section-separator"></div>
-
     <div class="realtime-section">
       <h2>💬 실시간 상담 현황</h2>
       <div class="realtime">
@@ -384,18 +381,14 @@
         </div>
       </div>
     </div>
-
     <div class="section-separator"></div>
-
     <form id="applicationForm" autocomplete="off">
       <input type="hidden" name="폼구분" value="v2" />
       <input type="hidden" name="carrier" id="carrier" />
       <input type="hidden" name="product" id="product" />
       <input type="hidden" name="tv_extra" id="tv_extra" />
       <input type="hidden" name="addons" id="addons" />
-
       <div class="form-title">상담예약서</div>
-
       <div class="section-title" style="font-size:20px;color:#222;">Q. 상품을 선택해주세요.</div>
       <div class="btn-group" id="product-group">
         <button type="button">인터넷</button>
@@ -408,20 +401,16 @@
         반드시 <span style="color:#0077c2;font-weight:bold;">‘인터넷+TV’</span>와 <span style="color:#ffd700;font-weight:bold;">‘TV추가’</span> 버튼을 함께 선택해주세요.<br />
         TV만 신청하실 경우 <span style="color:#ffd700;font-weight:bold;">‘TV추가’</span>만 선택하셔도 접수 가능합니다.
       </div>
-
       <div class="section-title" style="font-size:20px;color:#222;">Q. 통신사를 선택해주세요.</div>
       <div class="btn-group" id="carrier-group">
         <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
         <button type="button">LG 헬로비전</button><button type="button">KT 스카일라이프</button>
       </div>
-
       <div class="section-title" style="font-size:20px;color:#222;">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
       <div class="btn-group multi" id="addons-group">
         <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
       </div>
-
       <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
-
       <div class="form-field">
         <label for="name">성함</label>
         <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required />
@@ -431,9 +420,7 @@
         <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required />
       </div>
       <div class="info-banner">⏰ 24시간 연중무휴! 지금 접수하시면 바로 상담 연결됩니다.</div>
-
       <div style="border-top: 2px dashed #ccc; margin: 30px 0 15px 0;"></div>
-
       <div class="form-field">
         <select name="time" id="time">
           <option value="">상담시간 선택 (10시~22시)</option>
@@ -455,14 +442,12 @@
       <button class="submit-btn" type="submit">상담 신청하기</button>
     </form>
   </div>
-
   <div id="review-popup" aria-hidden="true">
     <div class="close-area" tabindex="0" role="button" aria-label="Close review popup"></div>
     <img src="" alt="Review large view" />
   </div>
-
   <script>
-    // JS 동일
+    // 실시간 상담현황 - tbody 2배 복제해서 무한스크롤 애니메이션 연출
     const AIRTABLE_TOKEN = "patsLgTBSt5CorHUB.5bb3ba67450d67ac9da759726724d4c3af2d3b8534c9b9aa595a331d382fba3b";
     const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL";
     const AIRTABLE_TABLE_NAME = "당일민족1";
@@ -485,9 +470,10 @@
           tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
           return;
         }
+        // 실제 데이터 2배 복제
         const limitedRecords = data.records.slice(0, 50);
-        const combinedRecords = [...limitedRecords, ...limitedRecords];
-        combinedRecords.forEach((record, idx) => {
+        const allRecords = [...limitedRecords, ...limitedRecords];
+        allRecords.forEach((record, idx) => {
           const row = record.fields;
           const status = row["진행상황"] || "상담예약";
           const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
@@ -514,6 +500,17 @@
           `;
           tbody.appendChild(tr);
         });
+        // tbody scrollLoop 애니메이션 재시작 (초기화)
+        const realtimeInner = document.getElementById("realtime-inner");
+        const tbodyEl = tbody;
+        tbodyEl.style.animation = "none";
+        // 강제로 재시작(리플로우 트릭)
+        void tbodyEl.offsetWidth;
+        tbodyEl.style.animation = null;
+        // 일시정지/재생
+        realtimeInner.onmouseenter = () => { tbodyEl.classList.add('paused'); };
+        realtimeInner.onmouseleave = () => { tbodyEl.classList.remove('paused'); };
+
         if (isAdmin) {
           document.querySelectorAll(".admin-select").forEach((select) => {
             select.addEventListener("change", async function () {
@@ -652,7 +649,6 @@
         }
       });
     });
-
     const reviewPopup = document.getElementById("review-popup");
     const reviewPopupImg = reviewPopup.querySelector("img");
     const closeArea = reviewPopup.querySelector(".close-area");
