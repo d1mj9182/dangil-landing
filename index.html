@@ -11,19 +11,21 @@
 
     /* 배너 크게 및 비율 맞춤 */
     .banner {
-      position: sticky;
-      top: 0;
       background: #fff;
       z-index: 20;
       padding-bottom: 10px;
+      /* position: sticky 제거 */
+      /* top: 0; */
     }
     .banner img {
       width: 100%;
-      height: 320px;  /* 1920x640 비율에서 높이를 최대한 크게 */
+      height: auto;      /* 이미지 원본 비율 유지하면서 전체 표시 */
       max-height: none;
       border-radius: 10px;
-      object-fit: cover;
+      object-fit: contain; /* 전체 이미지 보이도록 조정 */
       aspect-ratio: 1920 / 640;
+      display: block;
+      margin: 0 auto;
     }
 
     /* 실제 후기 영역 스타일 */
@@ -128,14 +130,14 @@
     }
 
     .realtime {
-      max-height: 270px; /* 5줄 정도 보이게 높이 확장 */
+      max-height: 280px;  /* 5명 정도 보이도록 충분한 높이 */
       position: relative;
       font-size: 25px;
       overflow: hidden;
     }
 
     .realtime-inner {
-      height: 270px; /* realtime과 동일 높이 유지 */
+      height: 280px; /* realtime과 동일 높이 */
       overflow: hidden;
       position: relative;
       scrollbar-width: thin;
@@ -178,7 +180,7 @@
     .realtime tbody.realtime-table-body:hover {
       animation-play-state: paused;
       overflow-y: auto;
-      max-height: 270px;
+      max-height: 280px;
       display: block;
     }
     .realtime thead {
@@ -383,7 +385,7 @@
         border-width: 2px;
       }
       .banner img {
-        height: 180px;
+        height: auto;
       }
     }
 
@@ -557,14 +559,14 @@
           const product = row["상품"] || "";
 
           const statusDisplay = isAdmin
-            ? `<select class="admin-select" data-id="${id}">
-                ${["상담예약","상담중","설치예약","입금완료"].map(opt => {
+            ? `<select class="admin-select" data-id="${id}">` +
+                ["상담예약","상담중","설치예약","입금완료"].map(opt => {
                   if (opt === "상담중" && status !== "상담예약" && status !== "설치예약" && status !== "입금완료") {
                     return `<option value="상담중" selected>상담중</option>`;
                   }
                   return `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`;
-                }).join("")}
-              </select>`
+                }).join("") +
+              `</select>`
             : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
 
           const tr = document.createElement("tr");
@@ -581,8 +583,7 @@
           document.querySelectorAll(".admin-select").forEach((select) => {
             select.addEventListener("change", async function () {
               const id = this.getAttribute("data-id");
-              const newStatus = this.value;
-              await updateStatusAirtable(id.replace("_dup", ""), newStatus);
+              await updateStatusAirtable(id.replace("_dup", ""), this.value);
               fetchDataAirtable();
             });
           });
