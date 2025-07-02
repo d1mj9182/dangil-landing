@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>당일민족 상담 신청</title>
   <style>
-    /* 전체 폰트 크기 + Pretendard */
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
     .container { max-width: 720px; margin: auto; }
 
@@ -14,18 +13,28 @@
       background: #fff;
       z-index: 20;
       padding-bottom: 10px;
-      /* position: sticky 제거 */
-      /* top: 0; */
     }
     .banner img {
       width: 100%;
-      height: auto;      /* 이미지 원본 비율 유지하면서 전체 표시 */
+      height: auto;
       max-height: none;
       border-radius: 10px;
-      object-fit: contain; /* 전체 이미지 보이도록 조정 */
+      object-fit: contain;
       aspect-ratio: 1920 / 640;
       display: block;
       margin: 0 auto;
+    }
+
+    /* ★ 통일된 타이틀 폰트/색상 */
+    .review-title,
+    .realtime-section > h2,
+    .form-title {
+      font-size: 25px !important;
+      font-weight: 700;
+      color: #000 !important;
+      margin-bottom: 10px;
+      text-align: center;
+      letter-spacing: -1px;
     }
 
     /* 실제 후기 영역 스타일 */
@@ -36,14 +45,6 @@
       padding: 15px 10px 10px 10px;
       box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
       margin: 20px 0 30px;
-    }
-
-    .review-title {
-      font-size: 25px;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 10px;
-      text-align: center;
     }
 
     .review-slider {
@@ -109,6 +110,7 @@
       position: absolute; width: 100%; height: 100%; top:0; left:0; cursor: pointer;
     }
 
+    /* === 실시간 상담 현황 === */
     .realtime-section {
       background-color: #fff;
       border: 3px solid #000;
@@ -121,32 +123,22 @@
       position: relative;
     }
 
-    .realtime-section > h2 {
-      font-weight: 700;
-      text-align: center;
-      margin: 0 0 12px 0;
-      padding-top: 2px;
-      line-height: 1.1;
-    }
-
     .realtime {
-      max-height: 350px;  /* 5명 정도 보이도록 충분한 높이로 증가 */
+      max-height: 700px;
+      height: 700px;
       position: relative;
       font-size: 25px;
       overflow: hidden;
     }
-
     .realtime-inner {
-      height: 350px; /* realtime과 동일 높이로 증가 */
-      overflow: hidden;
+      height: 700px;
+      /* 스크롤 하나만 */
+      overflow-y: auto;
       position: relative;
       scrollbar-width: thin;
       scrollbar-color: #0077c2 #f1f1f1;
       mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
-    }
-    .realtime-inner:hover {
-      overflow-y: auto;
     }
     .realtime-inner::-webkit-scrollbar {
       width: 8px;
@@ -156,7 +148,6 @@
       border-radius: 4px;
     }
 
-    /* 테이블 및 애니메이션 */
     .realtime table {
       width: 100%;
       border-collapse: collapse;
@@ -180,7 +171,7 @@
     .realtime tbody.realtime-table-body:hover {
       animation-play-state: paused;
       overflow-y: auto;
-      max-height: 350px;
+      max-height: 700px;
       display: block;
     }
     .realtime thead {
@@ -206,18 +197,12 @@
       word-break: break-word;
       color: #000;
     }
-
-    /* 컬럼 너비 */
     .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 20%; }
     .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 20%; }
     .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; font-size: 18px; }
     .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 20%; }
 
-    .admin-cell {
-      min-width: 140px;
-      padding: 6px !important;
-      font-size: 18px;
-    }
+    .admin-cell { min-width: 140px; padding: 6px !important; font-size: 18px; }
 
     .status-red { color: red; font-weight: bold; }
     .status-orange { color: orange; font-weight: bold; }
@@ -233,14 +218,12 @@
       min-width: 90px;
     }
 
-    /* 절취선 100% 너비 */
     .section-separator {
       border-top: 2px dashed #ccc;
       margin: 20px 0 30px 0;
       width: 100%;
     }
 
-    /* 버튼 그룹 */
     .btn-group {
       display: flex;
       flex-wrap: wrap;
@@ -275,10 +258,7 @@
       box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
     }
 
-    /* 폼 필드 */
-    .form-field {
-      margin-bottom: 20px;
-    }
+    .form-field { margin-bottom: 20px; }
     .form-field label {
       font-weight: bold;
       display: block;
@@ -346,63 +326,43 @@
     }
 
     @media (max-width: 600px) {
-      body {
-        font-size: 18px;
-        padding: 10px;
+      body { font-size: 18px; padding: 10px; }
+      /* ↓↓↓↓↓ 상담현황 모바일 폰트/row 2배 축소 */
+      .realtime table,
+      .realtime th,
+      .realtime td {
+        font-size: 9px !important;
       }
-      .realtime table {
-        font-size: 16px !important; /* 모바일에서 폰트 축소 */
+      .realtime th, .realtime td {
+        padding: 4px 2px !important;
+        height: 18px !important;
       }
-      .realtime th:nth-child(1), .realtime td:nth-child(1) { width: 25%; }
-      .realtime th:nth-child(2), .realtime td:nth-child(2) { width: 25%; }
-      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 35%; font-size: 14px !important; }
-      .realtime th:nth-child(4), .realtime td:nth-child(4) { width: 30%; }
-      .admin-cell {
-        font-size: 14px !important;
-        padding: 6px !important;
-      }
-      .admin-select {
-        font-size: 14px !important;
-      }
-      .btn-group button {
-        font-size: 18px;
-        padding: 8px;
-      }
-      .notice-box {
-        font-size: 13px;
-      }
+      .realtime th:nth-child(3), .realtime td:nth-child(3) { font-size: 7px !important; }
+      .admin-cell { font-size: 7px !important; padding: 4px 2px !important; }
+      .admin-select { font-size: 8px !important; }
+      .btn-group button { font-size: 14px; padding: 6px; }
+      .notice-box { font-size: 12px; }
       input[type=text], input[type=tel], select {
         width: 95%;
-        font-size: 16px;
-        padding: 8px;
+        font-size: 13px;
+        padding: 7px;
       }
-      .submit-btn {
-        font-size: 16px;
-        padding: 12px;
-      }
-      .review-slide {
-        width: 140px;
-        height: 100px;
-        border-width: 2px;
-      }
-      .banner img {
-        height: auto;
+      .submit-btn { font-size: 13px; padding: 9px; }
+      .review-slide { width: 140px; height: 100px; border-width: 2px; }
+      .banner img { height: auto; }
+      /* 타이틀 폰트 18px(고정) 아닌, 25px 유지 */
+      .review-title,
+      .realtime-section > h2,
+      .form-title {
+        font-size: 25px !important;
       }
     }
 
-    .masked-name {
-      letter-spacing: 2px;
-      font-weight: 700;
-    }
+    .masked-name { letter-spacing: 2px; font-weight: 700; }
 
-    /* 무한 스크롤 애니메이션 */
     @keyframes scrollLoop {
-      0% {
-        transform: translateY(0);
-      }
-      100% {
-        transform: translateY(calc(-50%));
-      }
+      0% { transform: translateY(0); }
+      100% { transform: translateY(calc(-50%)); }
     }
   </style>
 </head>
@@ -452,6 +412,9 @@
       <input type="hidden" name="product" id="product" />
       <input type="hidden" name="tv_extra" id="tv_extra" />
       <input type="hidden" name="addons" id="addons" />
+
+      <!-- ★ 요구 5. 상품선택 위 '상담예약서' 추가 -->
+      <div class="form-title">상담예약서</div>
 
       <div class="section-title" style="font-size:20px;">Q. 상품을 선택해주세요.</div>
       <div class="btn-group" id="product-group">
@@ -513,6 +476,7 @@
       <br /><br />
       <button class="submit-btn" type="submit">상담 신청하기</button>
     </form>
+
   </div>
 
   <div id="review-popup" aria-hidden="true">
@@ -524,7 +488,6 @@
     const AIRTABLE_TOKEN = "patsLgTBSt5CorHUB.5bb3ba67450d67ac9da759726724d4c3af2d3b8534c9b9aa595a331d382fba3b";
     const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL";
     const AIRTABLE_TABLE_NAME = "당일민족1";
-
     const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
 
     function maskName(name) {
@@ -546,25 +509,16 @@
           tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
           return;
         }
-
         const limitedRecords = data.records.slice(0, 50);
-        // 원본 + 복제 데이터 붙이기 (무한 스크롤용)
         const combinedRecords = [...limitedRecords, ...limitedRecords];
-
         combinedRecords.forEach((record, idx) => {
           const row = record.fields;
           const status = row["진행상황"] || "상담예약";
           const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
-
-          // 접수일자에서 시간 제외하고 날짜만 YYYY-MM-DD 형식으로 자름
           let time = row["접수일자"] || "";
-          if(time.length >= 10){
-            time = time.slice(0,10);
-          }
-
+          if(time.length >= 10){ time = time.slice(0,10); }
           const name = maskName(row["고객명"] || "");
           const product = row["상품"] || "";
-
           const statusDisplay = isAdmin
             ? `<select class="admin-select" data-id="${id}">` +
                 ["상담예약","상담중","설치예약","입금완료"].map(opt => {
@@ -575,7 +529,6 @@
                 }).join("") +
               `</select>`
             : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
-
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${time}</td>
@@ -585,7 +538,6 @@
           `;
           tbody.appendChild(tr);
         });
-
         if (isAdmin) {
           document.querySelectorAll(".admin-select").forEach((select) => {
             select.addEventListener("change", async function () {
@@ -600,7 +552,6 @@
           '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
       }
     }
-
     function statusClass(status) {
       switch (status) {
         case "상담예약": return "status-red";
@@ -619,7 +570,6 @@
         default: return "";
       }
     }
-
     async function updateStatusAirtable(id, newStatus) {
       await fetch(
         `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`,
@@ -633,7 +583,6 @@
         }
       );
     }
-
     fetchDataAirtable();
     setInterval(fetchDataAirtable, 15000);
 
@@ -658,11 +607,9 @@
           }
         });
       });
-
       const form = document.getElementById("applicationForm");
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
-
         const name = document.getElementById("name").value.trim();
         const phone = document.getElementById("phone").value.trim();
         const carrierBtn = document.querySelector("#carrier-group button.active");
@@ -674,14 +621,12 @@
         );
         const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
         const time = document.getElementById("time").value;
-
         if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
           alert(
             "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
           );
           return;
         }
-
         document.getElementById("carrier").value = carrierBtn.textContent;
         document.getElementById("product").value = productBtn ? productBtn.textContent : "";
         document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
@@ -689,7 +634,6 @@
         document.getElementById("addons").value = Array.from(addonBtns)
           .map((btn) => btn.textContent)
           .join(",");
-
         const payload = {
           fields: {
             접수일자: new Date().toISOString().slice(0, 19).replace("T", " "),
@@ -703,7 +647,6 @@
             TV추가: tvExtraBtn ? "TV추가" : "",
           },
         };
-
         try {
           const res = await fetch(
             `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
@@ -737,7 +680,6 @@
     const reviewPopup = document.getElementById("review-popup");
     const reviewPopupImg = reviewPopup.querySelector("img");
     const closeArea = reviewPopup.querySelector(".close-area");
-
     document.querySelectorAll(".review-slide").forEach((slide) => {
       slide.addEventListener("click", () => {
         reviewPopupImg.src = slide.querySelector("img").src;
@@ -747,13 +689,11 @@
         reviewPopup.focus();
       });
     });
-
     closeArea.addEventListener("click", () => {
       reviewPopup.style.display = "none";
       reviewPopup.setAttribute("aria-hidden", "true");
       reviewPopupImg.src = "";
     });
-
     closeArea.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
         reviewPopup.style.display = "none";
@@ -764,13 +704,3 @@
   </script>
 </body>
 </html>
-
-1. 모바일 실시간 상담현황 폰트 엄청 깨진다 폰트크기 지금보다 2배이상줄여줘  
-2. 실시간 상담현황 스크롤이 2개가 있는데 2개중 1개는 빼줘 
-3. 실시간 상담현황 행을 지금보다 2배더 키워줘
-4. 진행상황쪽 기록 2배이상 칸을 줄여줘 
-
-
-5. 절취선과 상품을 선택해주세요 중간에 상담예약 글자넣어줘 
-6. 실제후기, 실제상담현황, 상담예약 크기를 실시간 상담 현황 폰트크기로 전부 맞춰주고 색상도 블랙으로 맞춰줘 
-전체코드 수정해서 완성형으로 복붙할수있게 만들어줘
