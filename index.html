@@ -19,12 +19,11 @@
     }
     .banner img {
       width: 100%;
-      height: auto;
-      border-radius: 10px;
+      height: 320px;  /* 1920x640 비율에서 높이를 최대한 크게 */
       max-height: none;
-      aspect-ratio: 1920 / 640;
+      border-radius: 10px;
       object-fit: cover;
-      max-height: 300px;
+      aspect-ratio: 1920 / 640;
     }
 
     /* 실제 후기 영역 스타일 */
@@ -129,14 +128,14 @@
     }
 
     .realtime {
-      max-height: 360px;
+      max-height: 270px; /* 5줄 정도 보이게 높이 확장 */
       position: relative;
       font-size: 25px;
       overflow: hidden;
     }
 
     .realtime-inner {
-      height: 280px;
+      height: 270px; /* realtime과 동일 높이 유지 */
       overflow: hidden;
       position: relative;
       scrollbar-width: thin;
@@ -179,7 +178,7 @@
     .realtime tbody.realtime-table-body:hover {
       animation-play-state: paused;
       overflow-y: auto;
-      max-height: 280px;
+      max-height: 270px;
       display: block;
     }
     .realtime thead {
@@ -384,7 +383,7 @@
         border-width: 2px;
       }
       .banner img {
-        max-height: 180px;
+        height: 180px;
       }
     }
 
