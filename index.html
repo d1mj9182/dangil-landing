@@ -536,7 +536,7 @@
     async function fetchDataAirtable() {
       try {
         const res = await fetch(
-          https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?sort[][field]=접수일자&sort[][direction]=desc&maxRecords=50,
+          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?sort[][field]=접수일자&sort[][direction]=desc&maxRecords=50`,
           { headers: { Authorization: "Bearer " + AIRTABLE_TOKEN } }
         );
         const data = await res.json();
@@ -566,23 +566,23 @@
           const product = row["상품"] || "";
 
           const statusDisplay = isAdmin
-            ? <select class="admin-select" data-id="${id}"> +
+            ? `<select class="admin-select" data-id="${id}">` +
                 ["상담예약","상담중","설치예약","입금완료"].map(opt => {
                   if (opt === "상담중" && status !== "상담예약" && status !== "설치예약" && status !== "입금완료") {
-                    return <option value="상담중" selected>상담중</option>;
+                    return `<option value="상담중" selected>상담중</option>`;
                   }
-                  return <option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>;
+                  return `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`;
                 }).join("") +
-              </select>
-            : <span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>;
+              `</select>`
+            : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
 
           const tr = document.createElement("tr");
-          tr.innerHTML = 
+          tr.innerHTML = `
             <td>${time}</td>
             <td class="masked-name">${name}</td>
             <td>${product}</td>
             <td class="admin-cell">${statusDisplay}</td>
-          ;
+          `;
           tbody.appendChild(tr);
         });
 
@@ -622,7 +622,7 @@
 
     async function updateStatusAirtable(id, newStatus) {
       await fetch(
-        https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id},
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -706,9 +706,9 @@
 
         try {
           const res = await fetch(
-            https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
+            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
               AIRTABLE_TABLE_NAME
-            )},
+            )}`,
             {
               method: "POST",
               headers: {
@@ -764,3 +764,13 @@
   </script>
 </body>
 </html>
+
+1. 모바일 실시간 상담현황 폰트 엄청 깨진다 폰트크기 지금보다 2배이상줄여줘  
+2. 실시간 상담현황 스크롤이 2개가 있는데 2개중 1개는 빼줘 
+3. 실시간 상담현황 행을 지금보다 2배더 키워줘
+4. 진행상황쪽 기록 2배이상 칸을 줄여줘 
+
+
+5. 절취선과 상품을 선택해주세요 중간에 상담예약 글자넣어줘 
+6. 실제후기, 실제상담현황, 상담예약 크기를 실시간 상담 현황 폰트크기로 전부 맞춰주고 색상도 블랙으로 맞춰줘 
+전체코드 수정해서 완성형으로 복붙할수있게 만들어줘
