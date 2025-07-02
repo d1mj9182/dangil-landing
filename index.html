@@ -17,11 +17,7 @@
       letter-spacing: -1px;
       text-shadow: none;
     }
-    .review-title {
-      color: #fff !important; /* 후기 타이틀 화이트로 변경 */
-      position: relative;
-      z-index: 1;
-    }
+    .review-title { color: #fff !important; position: relative; z-index: 1; }
     .review-section {
       background: #000;
       border-radius: 16px;
@@ -265,7 +261,7 @@
       font-size: 18px;
     }
     .realtime td.admin-cell { color: inherit; }
-    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40%; font-weight: 600; }
+    .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40% !important; font-weight: 600; }
     .admin-cell { min-width: 140px; padding: 6px !important; font-size: 18px; }
     .status-red { color: red !important; font-weight: bold; }
     .status-orange { color: orange !important; font-weight: bold; }
@@ -389,7 +385,7 @@
               </tr>
             </thead>
             <tbody class="realtime-table-body" id="realtime-body">
-              <tr><td colspan="4">데이터를 불러오는 중...</td></tr>
+              <!-- 기록 없는 빈 tbody, 자동으로 JS에서 채움 -->
             </tbody>
           </table>
         </div>
@@ -461,7 +457,6 @@
     <img src="" alt="Review large view" />
   </div>
   <script>
-    // 실시간 상담현황 - tbody 2배 복제해서 무한스크롤 애니메이션 연출
     const AIRTABLE_TOKEN = "patsLgTBSt5CorHUB.5bb3ba67450d67ac9da759726724d4c3af2d3b8534c9b9aa595a331d382fba3b";
     const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL";
     const AIRTABLE_TABLE_NAME = "당일민족1";
@@ -484,7 +479,7 @@
           tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
           return;
         }
-        // 실제 데이터 2배 복제
+        // 2배 복제(무한스크롤)
         const limitedRecords = data.records.slice(0, 50);
         const allRecords = [...limitedRecords, ...limitedRecords];
         allRecords.forEach((record, idx) => {
@@ -492,39 +487,49 @@
           const status = row["진행상황"] || "상담예약";
           const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
           let time = row["접수일자"] || "";
-          if(time.length >= 10){ time = time.slice(0,10); }
+          if (time.length >= 10) { time = time.slice(0, 10); }
           const name = maskName(row["고객명"] || "");
-          const product = row["상품"] || "";
+
+          // 상품 출력: 한 줄씩
+          const carrier = (row["통신사"] || "").trim();
+          const product = (row["상품"] || "").trim();
+          const tvExtra = (row["TV추가"] || "").trim();
+          const addons = (row["부가상품"] || "").split(',').map(s => s.trim()).filter(Boolean);
+
+          let productItems = [];
+          if (carrier) productItems.push(carrier);
+          if (product) productItems.push(product);
+          if (tvExtra) productItems.push(tvExtra);
+          if (addons.length) productItems = productItems.concat(addons);
+
+          // **여기서 <br>로 줄바꿈**
+          const productDisplay = productItems.map(item => `<div>${item}</div>`).join('');
+
           const statusDisplay = isAdmin
             ? `<select class="admin-select" data-id="${id}">` +
-                ["상담예약","상담중","설치예약","입금완료"].map(opt => {
-                  if (opt === "상담중" && status !== "상담예약" && status !== "설치예약" && status !== "입금완료") {
-                    return `<option value="상담중" selected>상담중</option>`;
-                  }
-                  return `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`;
-                }).join("") +
+                ["상담예약","상담중","설치예약","입금완료"].map(opt =>
+                  `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`
+                ).join("") +
               `</select>`
             : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
+
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${time}</td>
             <td class="masked-name">${name}</td>
-            <td>${product}</td>
+            <td>${productDisplay}</td>
             <td class="admin-cell">${statusDisplay}</td>
           `;
           tbody.appendChild(tr);
         });
-        // tbody scrollLoop 애니메이션 재시작 (초기화)
+        // 애니메이션 리셋
         const realtimeInner = document.getElementById("realtime-inner");
         const tbodyEl = tbody;
         tbodyEl.style.animation = "none";
-        // 강제로 재시작(리플로우 트릭)
         void tbodyEl.offsetWidth;
         tbodyEl.style.animation = null;
-        // 일시정지/재생
         realtimeInner.onmouseenter = () => { tbodyEl.classList.add('paused'); };
         realtimeInner.onmouseleave = () => { tbodyEl.classList.remove('paused'); };
-
         if (isAdmin) {
           document.querySelectorAll(".admin-select").forEach((select) => {
             select.addEventListener("change", async function () {
@@ -621,9 +626,14 @@
         document.getElementById("addons").value = Array.from(addonBtns)
           .map((btn) => btn.textContent)
           .join(",");
+        // === KST(한국시간)으로 날짜 생성 ===
+        const now = new Date();
+        const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+        const kstDateStr = kst.toISOString().slice(0, 19).replace("T", " ");
+
         const payload = {
           fields: {
-            접수일자: new Date().toISOString().slice(0, 19).replace("T", " "),
+            접수일자: kstDateStr,  // 한국시간으로 기록!
             고객명: name,
             연락처: phone,
             통신사: carrierBtn.textContent,
