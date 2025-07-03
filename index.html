@@ -139,7 +139,7 @@
       .banner img { height: 130px; }
     }
 
-    /* ----------- 모바일 only 테이블 구조 ------------ */
+    /* ----------- 모바일 only 테이블 구조 (비율 수정) ------------ */
     @media (max-width: 600px) {
       .review-section { border-width: 0 !important; }
       .realtime-section { border-width: 2px !important; }
@@ -154,10 +154,15 @@
         height: 18px !important;
         font-size: 15px !important;
         box-sizing: border-box;
-        width: 25% !important;
-        min-width: 120px !important;
       }
-      .realtime th:nth-child(3), .realtime td:nth-child(3) { width: 40% !important; min-width: 180px !important;}
+      .realtime th:nth-child(1),
+      .realtime td:nth-child(1) { width: 20% !important; min-width: 80px !important; }
+      .realtime th:nth-child(2),
+      .realtime td:nth-child(2) { width: 20% !important; min-width: 80px !important; }
+      .realtime th:nth-child(3),
+      .realtime td:nth-child(3) { width: 40% !important; min-width: 160px !important; }
+      .realtime th:nth-child(4),
+      .realtime td:nth-child(4) { width: 20% !important; min-width: 80px !important; }
       .admin-cell span { font-size: 7px !important; }
       .admin-cell { font-size: 12px !important; padding: 4px 2px !important; }
       .admin-select { font-size: 12px !important; }
