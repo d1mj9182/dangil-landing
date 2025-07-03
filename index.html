@@ -139,30 +139,40 @@
       .banner img { height: 130px; }
     }
 
-    /* ----------- 모바일 only 테이블 구조 (비율 수정) ------------ */
+    /* ----------- 모바일 only 테이블 구조 (20/20/40/20, 행/열 깨짐/여분행 문제 해결) ------------ */
     @media (max-width: 600px) {
       .review-section { border-width: 0 !important; }
       .realtime-section { border-width: 2px !important; }
       .realtime { max-height: 350px; height: 350px; }
-      .realtime-inner { height: 350px; overflow-x: auto; }
-      .realtime table { width: 600px; min-width:600px; table-layout: fixed !important; }
-      .realtime thead, .realtime tbody { display: block; width: 100%; }
-      .realtime thead tr, .realtime tbody tr { display: table; width: 100%; table-layout: fixed; }
+      .realtime-inner { height: 350px; overflow-x: hidden; }
+      .realtime table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed !important;
+        border-collapse: collapse;
+      }
+      .realtime thead, .realtime tbody {
+        display: table-row-group;
+        width: 100%;
+        table-layout: fixed;
+      }
       .realtime th, .realtime td {
-        display: table-cell;
         padding: 4px 2px !important;
         height: 18px !important;
         font-size: 15px !important;
         box-sizing: border-box;
+        text-align: center;
+        word-break: break-all;
+        vertical-align: middle;
       }
       .realtime th:nth-child(1),
-      .realtime td:nth-child(1) { width: 20% !important; min-width: 80px !important; }
+      .realtime td:nth-child(1) { width: 20% !important; }
       .realtime th:nth-child(2),
-      .realtime td:nth-child(2) { width: 20% !important; min-width: 80px !important; }
+      .realtime td:nth-child(2) { width: 20% !important; }
       .realtime th:nth-child(3),
-      .realtime td:nth-child(3) { width: 40% !important; min-width: 160px !important; }
+      .realtime td:nth-child(3) { width: 40% !important; }
       .realtime th:nth-child(4),
-      .realtime td:nth-child(4) { width: 20% !important; min-width: 80px !important; }
+      .realtime td:nth-child(4) { width: 20% !important; }
       .admin-cell span { font-size: 7px !important; }
       .admin-cell { font-size: 12px !important; padding: 4px 2px !important; }
       .admin-select { font-size: 12px !important; }
