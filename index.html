@@ -488,9 +488,16 @@
 setInterval(fetchDataAirtable, 15000);
       try {
         const res = await fetch(
-          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?sort[][field]=접수일자&sort[][direction]=desc&maxRecords=50`,
-          { headers: { Authorization: "Bearer " + AIRTABLE_TOKEN } }
-        );
+  "https://airtable-proxy-oyrb.vercel.app/api/submit",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      table: "당일민족1",
+      fields: payload.fields
+    }),
+  }
+);
         const data = await res.json();
         const tbody = document.getElementById("realtime-body");
         tbody.innerHTML = "";
