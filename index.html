@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>당일민족 상담 신청</title>
   <style>
+    /* 기존 스타일 전부 유지 */
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
     .container { max-width: 720px; margin: auto; }
     .review-title,
@@ -138,8 +139,6 @@
     @media (max-width: 900px) {
       .banner img { height: 130px; }
     }
-
-    /* ----------- 모바일 only 테이블 구조 (20/20/40/20, 행/열 깨짐/여분행 문제 해결) ------------ */
     @media (max-width: 600px) {
       .review-section { border-width: 0 !important; }
       .realtime-section { border-width: 2px !important; }
@@ -192,8 +191,6 @@
       }
       .review-title, .realtime-section > h2, .form-title { font-size: 25px !important; }
     }
-    /* ----------- 데스크탑(600px 초과)은 기존 구조 유지, 건들지 않음 ------------ */
-
     .realtime-section {
       background-color: #fff;
       border: 3px solid #000;
@@ -475,78 +472,73 @@
     <img src="" alt="Review large view" />
   </div>
   <script>
-    // ... (JS는 동일, 그대로 사용) ...
     const AIRTABLE_BASE_ID = "appCRfI2EJrLQJYBL";
     const AIRTABLE_TABLE_NAME = "당일민족1";
     const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
+
     function maskName(name) {
       if (!name) return "";
       if (name.length <= 2) return name[0] + "*";
       return name[0] + "*".repeat(name.length - 2) + name[name.length - 1];
     }
-    async function fetchDataAirtable() {
-  try {
-    const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ table: "당일민족1", fields: {} })
-    });
-    const data = await res.json();
-    const tbody = document.getElementById("realtime-body");
-    tbody.innerHTML = "";
-    if (!data.records || !data.records.length) {
-      tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
-      return;
-    }
 
-    // 실제 데이터 렌더링 로직 추가
-    const limitedRecords = data.records.slice(0, 50);
-    const allRecords = [...limitedRecords, ...limitedRecords];
-    allRecords.forEach((record, idx) => {
-      const row = record.fields;
-      const status = row["진행상황"] || "상담예약";
-      const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
-      let time = row["접수일자"] || "";
-      if (time.length >= 10) { time = time.slice(0, 10); }
-      const name = maskName(row["고객명"] || "");
-      const carrier = (row["통신사"] || "").trim();
-      const product = (row["상품"] || "").trim();
-      const tvExtra = (row["TV추가"] || "").trim();
-      const addons = (row["부가상품"] || "").split(',').map(s => s.trim()).filter(Boolean);
-      let productItems = [];
-      if (carrier) productItems.push(carrier);
-      if (product) productItems.push(product);
-      if (tvExtra) productItems.push(tvExtra);
-      if (addons.length) productItems = productItems.concat(addons);
-      const productDisplay = productItems.map(item => `<div>${item}</div>`).join('');
-      const statusDisplay = isAdmin
-        ? `<select class="admin-select" data-id="${id}">` +
-            ["상담예약","상담중","설치예약","입금완료"].map(opt =>
-              `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`
-            ).join("") +
-          `</select>`
-        : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${time}</td>
-        <td class="masked-name">${name}</td>
-        <td>${productDisplay}</td>
-        <td class="admin-cell">${statusDisplay}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-    
-    // 애니메이션 리셋 및 이벤트 추가 등
-    // (생략, 필요시 추가)
-  } catch (e) {
-    document.getElementById("realtime-body").innerHTML =
-      '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
-  }
-}
-// 함수 호출과 타이머는 525행 이후에 위치
-fetchDataAirtable();
-setInterval(fetchDataAirtable, 15000);
+    async function fetchDataAirtable() {
+      try {
+        const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ table: "당일민족1", fields: {} })
+        });
+        const data = await res.json();
+        const tbody = document.getElementById("realtime-body");
+        tbody.innerHTML = "";
+        if (!data.records || !data.records.length) {
+          tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
+          return;
+        }
+        const limitedRecords = data.records.slice(0, 50);
+        const allRecords = [...limitedRecords, ...limitedRecords];
+        allRecords.forEach((record, idx) => {
+          const row = record.fields;
+          const status = row["진행상황"] || "상담예약";
+          const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
+          let time = row["접수일자"] || "";
+          if (time.length >= 10) { time = time.slice(0, 10); }
+          const name = maskName(row["고객명"] || "");
+          const carrier = (row["통신사"] || "").trim();
+          const product = (row["상품"] || "").trim();
+          const tvExtra = (row["TV추가"] || "").trim();
+          const addons = (row["부가상품"] || "").split(',').map(s => s.trim()).filter(Boolean);
+          let productItems = [];
+          if (carrier) productItems.push(carrier);
+          if (product) productItems.push(product);
+          if (tvExtra) productItems.push(tvExtra);
+          if (addons.length) productItems = productItems.concat(addons);
+          const productDisplay = productItems.map(item => `<div>${item}</div>`).join('');
+          const statusDisplay = isAdmin
+            ? `<select class="admin-select" data-id="${id}">` +
+                ["상담예약","상담중","설치예약","입금완료"].map(opt =>
+                  `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`
+                ).join("") +
+              `</select>`
+            : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${time}</td>
+            <td class="masked-name">${name}</td>
+            <td>${productDisplay}</td>
+            <td class="admin-cell">${statusDisplay}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        document.getElementById("realtime-body").innerHTML =
+          '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
+      }
     }
+    fetchDataAirtable();
+    setInterval(fetchDataAirtable, 15000);
+
     function statusClass(status) {
       switch (status) {
         case "상담예약": return "status-red";
@@ -578,8 +570,6 @@ setInterval(fetchDataAirtable, 15000);
         }
       );
     }
-    fetchDataAirtable();
-    setInterval(fetchDataAirtable, 15000);
 
     document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".btn-group button").forEach((btn) => {
@@ -602,76 +592,35 @@ setInterval(fetchDataAirtable, 15000);
           }
         });
       });
+
       const form = document.getElementById("applicationForm");
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const carrierBtn = document.querySelector("#carrier-group button.active");
-  const productBtn = document.querySelector("#product-group button.active:not(.tv-extra)");
-  const tvExtraBtn = document.querySelector("#product-group button.tv-extra.active");
-  const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
-  const time = document.getElementById("time").value;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-  if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
-    alert(
-      "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
-    );
-    return;
-  }
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const carrierBtn = document.querySelector("#carrier-group button.active");
+        const productBtn = document.querySelector("#product-group button.active:not(.tv-extra)");
+        const tvExtraBtn = document.querySelector("#product-group button.tv-extra.active");
+        const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
+        const time = document.getElementById("time").value;
 
-  document.getElementById("carrier").value = carrierBtn.textContent;
-  document.getElementById("product").value = productBtn ? productBtn.textContent : "";
-  document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
+        if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
+          alert(
+            "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
+          );
+          return;
+        }
 
-  const addonBtns = document.querySelectorAll("#addons-group button.active");
-  document.getElementById("addons").value = Array.from(addonBtns)
-    .map((btn) => btn.textContent)
-    .join(",");
+        document.getElementById("carrier").value = carrierBtn.textContent;
+        document.getElementById("product").value = productBtn ? productBtn.textContent : "";
+        document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
 
-  // === KST(한국시간)으로 날짜 생성 ===
-  const now = new Date();
-  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-  const kstDateStr = kst.toISOString().slice(0, 19).replace("T", " ");
+        const addonBtns = document.querySelectorAll("#addons-group button.active");
+        document.getElementById("addons").value = Array.from(addonBtns)
+          .map((btn) => btn.textContent)
+          .join(",");
 
-  const payload = {
-    fields: {
-      접수일자: kstDateStr,
-      고객명: name,
-      연락처: phone,
-      통신사: carrierBtn.textContent,
-      상품: productBtn ? productBtn.textContent : "",
-      부가상품: Array.from(addonBtns).map((btn) => btn.textContent).join(","),
-      상담시간: time,
-      진행상황: "상담예약",
-      TV추가: tvExtraBtn ? "TV추가" : "",
-    },
-  };
-
-  try {
-    const res = await fetch(
-      "https://airtable-proxy-oyrb.vercel.app/api/submit",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          table: "당일민족1",
-          fields: payload.fields,
-        }),
-      }
-    );
-    if (res.ok) {
-      alert("상담 신청이 정상적으로 접수되었습니다!");
-      form.reset();
-      document
-        .querySelectorAll(".btn-group button.active")
-        .forEach((btn) => btn.classList.remove("active"));
-      fetchDataAirtable();
-    } else {
-      alert("접수 중 오류가 발생했습니다. 다시 시도해 주세요.");
-    }
-  } catch {
-    alert("접수 중 네트워크 오류가 발생했습니다.");
-  }
-});
         // === KST(한국시간)으로 날짜 생성 ===
         const now = new Date();
         const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
@@ -679,7 +628,7 @@ setInterval(fetchDataAirtable, 15000);
 
         const payload = {
           fields: {
-            접수일자: kstDateStr,  // 한국시간으로 기록!
+            접수일자: kstDateStr,
             고객명: name,
             연락처: phone,
             통신사: carrierBtn.textContent,
@@ -690,18 +639,19 @@ setInterval(fetchDataAirtable, 15000);
             TV추가: tvExtraBtn ? "TV추가" : "",
           },
         };
+
         try {
           const res = await fetch(
-  "https://airtable-proxy-oyrb.vercel.app/api/submit",
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      table: "당일민족1",
-      fields: payload.fields
-    })
-  }
-);
+            "https://airtable-proxy-oyrb.vercel.app/api/submit",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                table: "당일민족1",
+                fields: payload.fields,
+              }),
+            }
+          );
           if (res.ok) {
             alert("상담 신청이 정상적으로 접수되었습니다!");
             form.reset();
@@ -717,9 +667,11 @@ setInterval(fetchDataAirtable, 15000);
         }
       });
     });
+
     const reviewPopup = document.getElementById("review-popup");
     const reviewPopupImg = reviewPopup.querySelector("img");
     const closeArea = reviewPopup.querySelector(".close-area");
+
     document.querySelectorAll(".review-slide").forEach((slide) => {
       slide.addEventListener("click", () => {
         reviewPopupImg.src = slide.querySelector("img").src;
@@ -729,6 +681,7 @@ setInterval(fetchDataAirtable, 15000);
         reviewPopup.focus();
       });
     });
+
     closeArea.addEventListener("click", () => {
       reviewPopup.style.display = "none";
       reviewPopup.setAttribute("aria-hidden", "true");
