@@ -603,32 +603,77 @@ setInterval(fetchDataAirtable, 15000);
         });
       });
       const form = document.getElementById("applicationForm");
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        const name = document.getElementById("name").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const carrierBtn = document.querySelector("#carrier-group button.active");
-        const productBtn = document.querySelector(
-          "#product-group button.active:not(.tv-extra)"
-        );
-        const tvExtraBtn = document.querySelector(
-          "#product-group button.tv-extra.active"
-        );
-        const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
-        const time = document.getElementById("time").value;
-        if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
-          alert(
-            "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
-          );
-          return;
-        }
-        document.getElementById("carrier").value = carrierBtn.textContent;
-        document.getElementById("product").value = productBtn ? productBtn.textContent : "";
-        document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
-        const addonBtns = document.querySelectorAll("#addons-group button.active");
-        document.getElementById("addons").value = Array.from(addonBtns)
-          .map((btn) => btn.textContent)
-          .join(",");
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const carrierBtn = document.querySelector("#carrier-group button.active");
+  const productBtn = document.querySelector("#product-group button.active:not(.tv-extra)");
+  const tvExtraBtn = document.querySelector("#product-group button.tv-extra.active");
+  const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
+  const time = document.getElementById("time").value;
+
+  if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
+    alert(
+      "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
+    );
+    return;
+  }
+
+  document.getElementById("carrier").value = carrierBtn.textContent;
+  document.getElementById("product").value = productBtn ? productBtn.textContent : "";
+  document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
+
+  const addonBtns = document.querySelectorAll("#addons-group button.active");
+  document.getElementById("addons").value = Array.from(addonBtns)
+    .map((btn) => btn.textContent)
+    .join(",");
+
+  // === KST(한국시간)으로 날짜 생성 ===
+  const now = new Date();
+  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  const kstDateStr = kst.toISOString().slice(0, 19).replace("T", " ");
+
+  const payload = {
+    fields: {
+      접수일자: kstDateStr,
+      고객명: name,
+      연락처: phone,
+      통신사: carrierBtn.textContent,
+      상품: productBtn ? productBtn.textContent : "",
+      부가상품: Array.from(addonBtns).map((btn) => btn.textContent).join(","),
+      상담시간: time,
+      진행상황: "상담예약",
+      TV추가: tvExtraBtn ? "TV추가" : "",
+    },
+  };
+
+  try {
+    const res = await fetch(
+      "https://airtable-proxy-oyrb.vercel.app/api/submit",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          table: "당일민족1",
+          fields: payload.fields,
+        }),
+      }
+    );
+    if (res.ok) {
+      alert("상담 신청이 정상적으로 접수되었습니다!");
+      form.reset();
+      document
+        .querySelectorAll(".btn-group button.active")
+        .forEach((btn) => btn.classList.remove("active"));
+      fetchDataAirtable();
+    } else {
+      alert("접수 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
+  } catch {
+    alert("접수 중 네트워크 오류가 발생했습니다.");
+  }
+});
         // === KST(한국시간)으로 날짜 생성 ===
         const now = new Date();
         const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
