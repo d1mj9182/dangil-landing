@@ -659,18 +659,13 @@
         };
         try {
           const res = await fetch(
-            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
-              AIRTABLE_TABLE_NAME
-            )}`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: "Bearer " + AIRTABLE_TOKEN,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-            }
-          );
+  "https://airtable-proxy-oyrb.vercel.app/api/submit",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  }
+);
           if (res.ok) {
             alert("상담 신청이 정상적으로 접수되었습니다!");
             form.reset();
