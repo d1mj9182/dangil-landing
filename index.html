@@ -603,8 +603,6 @@ setInterval(fetchDataAirtable, 15000);
         });
       });
       const form = document.getElementById("applicationForm");
-form.addEventListener("submit", async function (e) {
-  e.preventDefault();
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const carrierBtn = document.querySelector("#carrier-group button.active");
