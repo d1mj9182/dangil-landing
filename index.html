@@ -460,7 +460,6 @@
     <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
   </div>
 </div>
-
 <script>
 window.addEventListener('DOMContentLoaded', function() {
   const video = document.getElementById('dangilMainVideo');
@@ -495,16 +494,6 @@ window.addEventListener('DOMContentLoaded', function() {
 </script>
 </style>
 
-<div class="dangil-flip-wrap">
-  <div class="dangil-flip-seq">
-    <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
-      <source src="video.mp4" type="video/mp4">
-      동영상이 지원되지 않습니다.
-    </video>
-    <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
-    <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
-  </div>
-</div>
 
 <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -535,113 +524,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 800); // flip 애니메이션 시간
       }, 3000);
     }, 800); // flip 애니메이션 시간
-  }, 5000);
-});
-</script>
-    
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  const video = document.getElementById('dangilMainVideo');
-  const image = document.getElementById('dangilMainImage');
-  const ad = document.getElementById('dangilAdImage');
-
-  // 모든 페이지 초기화(광고만 보이면 안되도록)
-  video.classList.remove('hidden', 'flip');
-  image.classList.add('hidden'); image.classList.remove('flip');
-  ad.classList.add('hidden'); ad.classList.remove('flip');
-
-  video.play();
-
-  // 1. 동영상 5초 후 flip
-  setTimeout(function() {
-    video.classList.add('flip');
-    setTimeout(function() {
-      video.classList.add('hidden');
-      image.classList.remove('hidden');
-      // flip 애니메이션 초기화
-      setTimeout(function() { image.classList.remove('flip'); }, 50);
-      // 2. 3초 후 사진에서 광고로 flip
-      setTimeout(function() {
-        image.classList.add('flip');
-        setTimeout(function() {
-          image.classList.add('hidden');
-          ad.classList.remove('hidden');
-          setTimeout(function() { ad.classList.remove('flip'); }, 50);
-        }, 800); // flip 시간
-      }, 3000);
-    }, 800); // flip 시간
-  }, 5000);
-});
-</script>
-</style>
-
-<!-- HTML 구조 -->
-<div class="dangil-flip-wrap">
-  <div class="dangil-flip-seq">
-    <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
-      <source src="video.mp4" type="video/mp4">
-      동영상이 지원되지 않습니다.
-    </video>
-    <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
-    <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
-  </div>
-</div>
-
-<!-- JS(애니메이션/전환) -->
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  const video = document.getElementById('dangilMainVideo');
-  const image = document.getElementById('dangilMainImage');
-  const ad = document.getElementById('dangilAdImage');
-
-  // 시작: 동영상만 보이게
-  video.classList.remove('hidden');
-  image.classList.add('hidden');
-  ad.classList.add('hidden');
-
-  video.play();
-
-  // 1. 동영상 5초 후 책넘기기 애니메이션
-  setTimeout(function() {
-    video.classList.add('flip');
-    setTimeout(function() {
-      video.classList.add('hidden'); // 동영상 숨김
-      image.classList.remove('hidden'); // 사진 등장
-      image.classList.remove('flip');
-      // 2. 사진 3초 후 책넘기기 애니메이션
-      setTimeout(function() {
-        image.classList.add('flip');
-        setTimeout(function() {
-          image.classList.add('hidden'); // 사진 숨김
-          ad.classList.remove('hidden'); // 광고 등장
-          ad.classList.remove('flip');
-        }, 800); // flip 애니메이션 시간
-      }, 3000); // 사진 노출시간 (3초)
-    }, 800); // flip 애니메이션 시간
-  }, 5000); // 동영상 노출시간 (5초)
-});
-</script>
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  const video = document.getElementById('dangilMainVideo');
-  const image = document.getElementById('dangilMainImage');
-  const ad = document.getElementById('dangilAdImage');
-
-  // 1. 동영상 5초 후 책 넘기기 효과로 사진 등장
-  setTimeout(function() {
-    video.classList.add('flip');
-    setTimeout(function() {
-      video.classList.add('hidden');
-      image.classList.remove('hidden');
-      // 2. 2초 후 사진에서 광고로 책 넘기기 효과
-      setTimeout(function() {
-        image.classList.add('flip');
-        setTimeout(function() {
-          image.classList.add('hidden');
-          ad.classList.remove('hidden');
-        }, 800); // flip 애니메이션 시간과 맞춤
-      }, 3000);
-    }, 800); // flip 애니메이션 시간과 맞춤
   }, 5000);
 });
 </script>
