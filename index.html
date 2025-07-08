@@ -380,11 +380,11 @@
     <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
 <style>
 .dangil-flip-seq {
-  perspective: 1600px;
+  perspective: 1800px;
   width: 100%;
-  max-width: 860px;    /* PC에서 더 넓게 */
-  height: 480px;        /* PC에서 더 높게 */
-  min-height: 180px;
+  max-width: 1200px;    /* 더 넓게 */
+  height: 700px;        /* 더 높게 */
+  min-height: 250px;
   position: relative;
   display: flex;
   align-items: center;
@@ -392,11 +392,11 @@
 }
 .dangil-flip-page {
   width: 100%;
-  max-width: 860px;
-  height: 480px;
+  max-width: 1200px;
+  height: 700px;
   background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 12px 38px #0004;
+  border-radius: 20px;
+  box-shadow: 0 14px 44px #0004;
   position: absolute;
   left: 0; top: 0;
   transform-style: preserve-3d;
@@ -409,16 +409,28 @@
   justify-content: center;
   object-fit: cover;
 }
-@media (max-width: 950px) {
-  .dangil-flip-seq, .dangil-flip-page {
-    max-width: 97vw;
-    height: 54vw;    /* 더 높은 비율로 확대 */
-    min-height: 140px;
+.dangil-flip-page video,
+.dangil-flip-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 1350px) {
+  .dangil-flip-seq,
+  .dangil-flip-page {
+    max-width: 99vw;
+    height: 57vw;
+    min-height: 150px;
   }
 }
 @media (max-width: 600px) {
-  .dangil-flip-seq, .dangil-flip-page {
-    border-radius: 10px;
+  .dangil-flip-seq,
+  .dangil-flip-page {
+    border-radius: 12px;
     min-height: 100px;
   }
 }
