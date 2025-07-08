@@ -380,11 +380,11 @@
     <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
 <style>
 .dangil-flip-seq {
-  perspective: 1800px;
+  perspective: 1300px;
   width: 100%;
-  max-width: 1200px;    /* 더 넓게 */
-  height: 700px;        /* 더 높게 */
-  min-height: 250px;
+  max-width: 720px;
+  height: 700px;
+  min-height: 200px;
   position: relative;
   display: flex;
   align-items: center;
@@ -392,11 +392,11 @@
 }
 .dangil-flip-page {
   width: 100%;
-  max-width: 1200px;
+  max-width: 720px;
   height: 700px;
   background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 14px 44px #0004;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px #0003;
   position: absolute;
   left: 0; top: 0;
   transform-style: preserve-3d;
@@ -414,24 +414,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 20px;
+  border-radius: 16px;
   display: block;
 }
-
-/* 모바일 반응형 */
-@media (max-width: 1350px) {
-  .dangil-flip-seq,
-  .dangil-flip-page {
-    max-width: 99vw;
-    height: 57vw;
-    min-height: 150px;
-  }
-}
-@media (max-width: 600px) {
-  .dangil-flip-seq,
-  .dangil-flip-page {
-    border-radius: 12px;
-    min-height: 100px;
+@media (max-width: 900px) {
+  .dangil-flip-seq, .dangil-flip-page {
+    max-width: 97vw;
+    height: 54vw;
+    min-height: 120px;
   }
 }
 </style>
