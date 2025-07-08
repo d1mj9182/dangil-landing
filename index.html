@@ -381,61 +381,121 @@
 <style>
 <!-- 스타일(CSS) -->
 <style>
-@media (min-width: 801px) {
-  .dangil-flip-wrap {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 40px 0 40px 0;
-  }
+<!-- 1. 스타일(CSS) -->
+<style>
+.dangil-flip-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 40px 0;
+}
+.dangil-flip-seq {
+  perspective: 1300px;
+  width: 100%;
+  max-width: 700px;
+  height: 1100px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.dangil-flip-page {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px #0003;
+  position: absolute;
+  top: 0; left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+.dangil-flip-page video,
+.dangil-flip-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 전체 보이기, 잘림 방지 */
+  border-radius: 16px;
+  display: block;
+  background: #fff;
+}
+.dangil-flip-page.hidden { display: none !important; }
+.dangil-flip-page.flip {
+  animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
+}
+@keyframes dangilbookflip {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to { transform: rotateY(-100deg); opacity: 0.3; }
+}
+/* 모바일 반응형 */
+@media (max-width: 800px) {
   .dangil-flip-seq {
-    perspective: 1300px;
-    width: 100%;
-    max-width: 700px;
-    height: 1100px;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: visible;
+    max-width: 97vw;
+    height: calc(97vw * 1.57);
+    min-height: 200px;
   }
   .dangil-flip-page {
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 28px #0003;
-    position: absolute;
-    top: 0; left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
-    backface-visibility: hidden;
-    will-change: transform, opacity;
-    overflow: hidden;
-  }
-  .dangil-flip-page video,
-  .dangil-flip-page img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 16px;
-    display: block;
-    background: #fff;
-  }
-  .dangil-flip-page.hidden { display: none !important; }
-  .dangil-flip-page.flip {
-    animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
-  }
-  @keyframes dangilbookflip {
-    from { transform: rotateY(0deg); opacity: 1; }
-    to { transform: rotateY(-100deg); opacity: 0.3; }
+    border-radius: 10px;
   }
 }
+</style>
+
+<!-- 2. HTML 구조 -->
+<div class="dangil-flip-wrap">
+  <div class="dangil-flip-seq">
+    <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
+      <source src="video.mp4" type="video/mp4">
+      동영상이 지원되지 않습니다.
+    </video>
+    <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
+    <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
+  </div>
+</div>
+
+<!-- 3. JS(애니메이션/시퀀스) -->
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('dangilMainVideo');
+  const image = document.getElementById('dangilMainImage');
+  const ad = document.getElementById('dangilAdImage');
+
+  // 모든 페이지 초기화(광고만 보이면 안되도록)
+  video.classList.remove('hidden', 'flip');
+  image.classList.add('hidden'); image.classList.remove('flip');
+  ad.classList.add('hidden'); ad.classList.remove('flip');
+
+  video.play();
+
+  // 1. 동영상 5초 후 flip
+  setTimeout(function() {
+    video.classList.add('flip');
+    setTimeout(function() {
+      video.classList.add('hidden');
+      image.classList.remove('hidden');
+      // flip 애니메이션 초기화
+      setTimeout(function() { image.classList.remove('flip'); }, 50);
+      // 2. 3초 후 사진에서 광고로 flip
+      setTimeout(function() {
+        image.classList.add('flip');
+        setTimeout(function() {
+          image.classList.add('hidden');
+          ad.classList.remove('hidden');
+          setTimeout(function() { ad.classList.remove('flip'); }, 50);
+        }, 800); // flip 시간
+      }, 3000);
+    }, 800); // flip 시간
+  }, 5000);
+});
+</script>
 </style>
 
 <!-- HTML 구조 -->
