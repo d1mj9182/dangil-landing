@@ -481,61 +481,56 @@
       if (name.length <= 2) return name[0] + "*";
       return name[0] + "*".repeat(name.length - 2) + name[name.length - 1];
     }
-
     async function fetchDataAirtable() {
-      try {
-        const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/당일민족1");
+  try {
+    const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/당일민족1");
     const data = await res.json();
-    // 이하 동일...
-  } catch (e) { ... }
-}
-        const data = await res.json();
-        const tbody = document.getElementById("realtime-body");
-        tbody.innerHTML = "";
-        if (!data.records || !data.records.length) {
-          tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
-          return;
-        }
-        const limitedRecords = data.records.slice(0, 50);
-        const allRecords = [...limitedRecords, ...limitedRecords];
-        allRecords.forEach((record, idx) => {
-          const row = record.fields;
-          const status = row["진행상황"] || "상담예약";
-          const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
-          let time = row["접수일자"] || "";
-          if (time.length >= 10) { time = time.slice(0, 10); }
-          const name = maskName(row["고객명"] || "");
-          const carrier = (row["통신사"] || "").trim();
-          const product = (row["상품"] || "").trim();
-          const tvExtra = (row["TV추가"] || "").trim();
-          const addons = (row["부가상품"] || "").split(',').map(s => s.trim()).filter(Boolean);
-          let productItems = [];
-          if (carrier) productItems.push(carrier);
-          if (product) productItems.push(product);
-          if (tvExtra) productItems.push(tvExtra);
-          if (addons.length) productItems = productItems.concat(addons);
-          const productDisplay = productItems.map(item => `<div>${item}</div>`).join('');
-          const statusDisplay = isAdmin
-            ? `<select class="admin-select" data-id="${id}">` +
-                ["상담예약","상담중","설치예약","입금완료"].map(opt =>
-                  `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`
-                ).join("") +
-              `</select>`
-            : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${time}</td>
-            <td class="masked-name">${name}</td>
-            <td>${productDisplay}</td>
-            <td class="admin-cell">${statusDisplay}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (e) {
-        document.getElementById("realtime-body").innerHTML =
-          '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
-      }
+    const tbody = document.getElementById("realtime-body");
+    tbody.innerHTML = "";
+    if (!data.records || !data.records.length) {
+      tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
+      return;
     }
+    const limitedRecords = data.records.slice(0, 50);
+    const allRecords = [...limitedRecords, ...limitedRecords];
+    allRecords.forEach((record, idx) => {
+      const row = record.fields;
+      const status = row["진행상황"] || "상담예약";
+      const id = record.id + (idx >= limitedRecords.length ? "_dup" : "");
+      let time = row["접수일자"] || "";
+      if (time.length >= 10) { time = time.slice(0, 10); }
+      const name = maskName(row["고객명"] || "");
+      const carrier = (row["통신사"] || "").trim();
+      const product = (row["상품"] || "").trim();
+      const tvExtra = (row["TV추가"] || "").trim();
+      const addons = (row["부가상품"] || "").split(',').map(s => s.trim()).filter(Boolean);
+      let productItems = [];
+      if (carrier) productItems.push(carrier);
+      if (product) productItems.push(product);
+      if (tvExtra) productItems.push(tvExtra);
+      if (addons.length) productItems = productItems.concat(addons);
+      const productDisplay = productItems.map(item => `<div>${item}</div>`).join('');
+      const statusDisplay = isAdmin
+        ? `<select class="admin-select" data-id="${id}">` +
+            ["상담예약","상담중","설치예약","입금완료"].map(opt =>
+              `<option value="${opt}" ${opt === status ? "selected" : ""}>${opt}</option>`
+            ).join("") +
+          `</select>`
+        : `<span class="${statusClass(status)}">${statusIcon(status)} ${status}</span>`;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${time}</td>
+        <td class="masked-name">${name}</td>
+        <td>${productDisplay}</td>
+        <td class="admin-cell">${statusDisplay}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (e) {
+    document.getElementById("realtime-body").innerHTML =
+      '<tr><td colspan="4">데이터 불러오기 실패</td></tr>';
+  }
+}
     fetchDataAirtable();
     setInterval(fetchDataAirtable, 15000);
 
