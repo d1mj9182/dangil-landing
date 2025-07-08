@@ -646,10 +646,7 @@
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                table: "당일민족1",
-                fields: payload.fields,
-              }),
+              body: JSON.stringify({ fields: payload.fields })
             }
           );
           if (res.ok) {
