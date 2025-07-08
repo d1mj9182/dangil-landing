@@ -377,6 +377,93 @@
     <div class="banner">
       <img src="form_banner_1600_400.png" alt="인터넷성지 배너" />
     </div>
+    <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
+<style>
+.dangil-flip-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 36px 0;
+}
+.dangil-flip-seq {
+  perspective: 1300px;
+  width: 350px;
+  height: 230px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dangil-flip-page {
+  width: 350px; height: 230px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px #0003;
+  position: absolute;
+  left: 0; top: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
+  backface-visibility: hidden;
+  overflow: hidden;
+  will-change: transform, opacity;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+}
+.dangil-flip-page video,
+.dangil-flip-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+.dangil-flip-page.hidden { display: none !important; }
+.dangil-flip-page.flip {
+  animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
+}
+@keyframes dangilbookflip {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to { transform: rotateY(-100deg); opacity: 0.3; }
+}
+</style>
+
+<div class="dangil-flip-wrap">
+  <div class="dangil-flip-seq">
+    <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
+      <source src="video.mp4" type="video/mp4">
+      동영상이 지원되지 않습니다.
+    </video>
+    <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
+    <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
+  </div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('dangilMainVideo');
+  const image = document.getElementById('dangilMainImage');
+  const ad = document.getElementById('dangilAdImage');
+
+  // 1. 동영상 5초 후 책 넘기기 효과로 사진 등장
+  setTimeout(function() {
+    video.classList.add('flip');
+    setTimeout(function() {
+      video.classList.add('hidden');
+      image.classList.remove('hidden');
+      // 2. 2초 후 사진에서 광고로 책 넘기기 효과
+      setTimeout(function() {
+        image.classList.add('flip');
+        setTimeout(function() {
+          image.classList.add('hidden');
+          ad.classList.remove('hidden');
+        }, 800); // flip 애니메이션 시간과 맞춤
+      }, 2000);
+    }, 800); // flip 애니메이션 시간과 맞춤
+  }, 5000);
+});
+</script>
     <div class="review-section">
       <div class="review-title">💬 실제 후기</div>
       <div class="review-slider" aria-label="Customer Reviews Slider">
