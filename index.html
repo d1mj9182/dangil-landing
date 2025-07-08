@@ -193,15 +193,19 @@
     }
     .realtime-section {
       background-color: #fff;
-      border: 3px solid #000;
-      border-radius: 14px;
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-      margin-bottom: 20px;
-      font-size: 25px;
-      color: #000;
-      position: relative;
-    }
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  margin-bottom: 20px;
+  font-size: 25px;
+  color: #000;
+  position: relative;
+
+  border: 4px solid;
+  border-image-slice: 1;
+  border-width: 4px;
+  border-image-source: linear-gradient(45deg, #ffd700, #ffb300, #fff6bf, #ffb300, #ffd700);
+}
     .realtime {
       max-height: 700px;
       height: 700px;
@@ -385,6 +389,11 @@
   justify-content: center;
   align-items: center;
   margin: 40px 0;
+  border: 4px solid;
+  border-image-slice: 1;
+  border-width: 4px;
+  border-image-source: linear-gradient(45deg, #ffd700, #ffb300, #fff6bf, #ffb300, #ffd700);
+  border-radius: 20px;
 }
 .dangil-flip-seq {
   perspective: 1300px;
