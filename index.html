@@ -379,16 +379,13 @@
     </div>
     <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
 <style>
-<!-- 스타일(CSS) -->
-<style>
-<!-- 1. 스타일(CSS) -->
 <style>
 .dangil-flip-wrap {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 40px 0 40px 0;
+  margin: 40px 0;
 }
 .dangil-flip-seq {
   perspective: 1300px;
@@ -413,6 +410,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.2rem; /* 데스크탑 글씨 크기 */
+  text-align: center;
+  word-break: break-all;
+  padding: 0 16px;
+  box-sizing: border-box;
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
   backface-visibility: hidden;
@@ -423,7 +425,7 @@
 .dangil-flip-page img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* 전체 보이기, 잘림 방지 */
+  object-fit: contain;
   border-radius: 16px;
   display: block;
   background: #fff;
@@ -436,7 +438,6 @@
   from { transform: rotateY(0deg); opacity: 1; }
   to { transform: rotateY(-100deg); opacity: 0.3; }
 }
-/* 모바일 반응형 */
 @media (max-width: 800px) {
   .dangil-flip-seq {
     max-width: 97vw;
@@ -444,9 +445,55 @@
     min-height: 200px;
   }
   .dangil-flip-page {
+    font-size: 1rem;
     border-radius: 10px;
   }
 }
+</style>
+
+<div class="dangil-flip-wrap">
+  <div class="dangil-flip-seq">
+    <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
+      <source src="video.mp4" type="video/mp4">
+      동영상이 지원되지 않습니다.
+    </video>
+    <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
+    <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
+  </div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('dangilMainVideo');
+  const image = document.getElementById('dangilMainImage');
+  const ad = document.getElementById('dangilAdImage');
+
+  // 초기화: 동영상만 보이게
+  video.classList.remove('hidden', 'flip');
+  image.classList.add('hidden'); image.classList.remove('flip');
+  ad.classList.add('hidden'); ad.classList.remove('flip');
+  video.play();
+
+  // 1. 동영상 5초 후 책넘김
+  setTimeout(function() {
+    video.classList.add('flip');
+    setTimeout(function() {
+      video.classList.add('hidden');
+      image.classList.remove('hidden');
+      setTimeout(function() { image.classList.remove('flip'); }, 10);
+      // 2. 사진 3초 후 책넘김
+      setTimeout(function() {
+        image.classList.add('flip');
+        setTimeout(function() {
+          image.classList.add('hidden');
+          ad.classList.remove('hidden');
+          setTimeout(function() { ad.classList.remove('flip'); }, 10);
+        }, 800); // flip 애니메이션 시간
+      }, 3000);
+    }, 800); // flip 애니메이션 시간
+  }, 5000);
+});
+</script>
 </style>
 
 <!-- 2. HTML 구조 -->
