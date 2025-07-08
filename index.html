@@ -485,10 +485,10 @@
     async function fetchDataAirtable() {
       try {
         const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ table: "당일민족1", fields: {} })
-        });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ fields: payload.fields })
+});
         const data = await res.json();
         const tbody = document.getElementById("realtime-body");
         tbody.innerHTML = "";
