@@ -486,7 +486,7 @@
     const res = await fetch(`https://airtable-proxy-oyrb.vercel.app/api/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ table: AIRTABLE_TABLE_NAME, action: "list" }),
+      body: JSON.stringify({ baseId: AIRTABLE_BASE_ID, tableName: AIRTABLE_TABLE_NAME, action: "list" }),
     });
     const data = await res.json();
     const tbody = document.getElementById("realtime-body");
@@ -646,19 +646,16 @@
         };
 
         try {
-          const res = await fetch(
-  "https://airtable-proxy-oyrb.vercel.app/api/submit",
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      table: "당일민족1",
-      action: "insert",
-      record: payload.fields
-    })
-  }
+          const res = await fetch('https://airtable-proxy-oyrb.vercel.app/api/submit', {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    baseId: AIRTABLE_BASE_ID,
+    tableName: AIRTABLE_TABLE_NAME,
+    action: "list"
+  }),
+});
 );
-
           if (res.ok) {
             alert("상담 신청이 정상적으로 접수되었습니다!");
             form.reset();
