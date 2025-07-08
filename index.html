@@ -560,8 +560,9 @@
     }
   }
 </script>
-    async function updateStatusAirtable(id, newStatus) {
-      await fetch(
+    <script>
+  async function updateStatusAirtable(id, newStatus) { ... }
+  document.addEventListener("DOMContentLoaded", function () { ... });
         `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`,
         {
           method: "PATCH",
@@ -573,7 +574,6 @@
         }
       );
     }
-
     document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".btn-group button").forEach((btn) => {
         btn.addEventListener("click", function () {
@@ -595,11 +595,9 @@
           }
         });
       });
-
       const form = document.getElementById("applicationForm");
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const name = document.getElementById("name").value.trim();
         const phone = document.getElementById("phone").value.trim();
         const carrierBtn = document.querySelector("#carrier-group button.active");
@@ -607,28 +605,23 @@
         const tvExtraBtn = document.querySelector("#product-group button.tv-extra.active");
         const agreeChecked = form.querySelector('input[type="checkbox"]:checked');
         const time = document.getElementById("time").value;
-
         if (!name || !phone || !carrierBtn || (!productBtn && !tvExtraBtn) || !agreeChecked) {
           alert(
             "성함, 연락처, 통신사, 상품 선택, 개인정보 동의를 모두 입력해주세요.\n(상품은 TV추가만 선택해도 접수 가능합니다)"
           );
           return;
         }
-
         document.getElementById("carrier").value = carrierBtn.textContent;
         document.getElementById("product").value = productBtn ? productBtn.textContent : "";
         document.getElementById("tv_extra").value = tvExtraBtn ? "TV추가" : "";
-
         const addonBtns = document.querySelectorAll("#addons-group button.active");
         document.getElementById("addons").value = Array.from(addonBtns)
           .map((btn) => btn.textContent)
           .join(",");
-
         // === KST(한국시간)으로 날짜 생성 ===
         const now = new Date();
         const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
         const kstDateStr = kst.toISOString().slice(0, 19).replace("T", " ");
-
         const payload = {
           fields: {
             접수일자: kstDateStr,
