@@ -637,13 +637,18 @@
 
         try {
           const res = await fetch(
-            "https://airtable-proxy-oyrb.vercel.app/api/submit",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload.fields)
-            }
-          );
+  "https://airtable-proxy-oyrb.vercel.app/api/submit",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      table: "당일민족1",
+      action: "insert",
+      record: payload.fields
+    })
+  }
+);
+
           if (res.ok) {
             alert("상담 신청이 정상적으로 접수되었습니다!");
             form.reset();
