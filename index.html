@@ -484,15 +484,11 @@
 
     async function fetchDataAirtable() {
       try {
-        const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        table: "당일민족1",
-        action: "select",
-        maxRecords: 50
-      })
-});
+        const res = await fetch("https://airtable-proxy-oyrb.vercel.app/api/당일민족1");
+    const data = await res.json();
+    // 이하 동일...
+  } catch (e) { ... }
+}
         const data = await res.json();
         const tbody = document.getElementById("realtime-body");
         tbody.innerHTML = "";
