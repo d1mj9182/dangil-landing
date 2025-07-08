@@ -381,65 +381,59 @@
 <style>
 <!-- 스타일(CSS) -->
 <style>
-.dangil-flip-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 40px 0 40px 0;
-}
-.dangil-flip-seq {
-  perspective: 1300px;
-  width: 100%;
-  max-width: 700px;
-  height: 1100px;
-  min-height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.dangil-flip-page {
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 28px #0003;
-  position: absolute;
-  top: 0; left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
-  backface-visibility: hidden;
-  will-change: transform, opacity;
-  overflow: hidden;
-}
-.dangil-flip-page video,
-.dangil-flip-page img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* 전체 보이기, 잘림 방지 */
-  border-radius: 16px;
-  display: block;
-  background: #fff;
-}
-.dangil-flip-page.hidden { display: none !important; }
-.dangil-flip-page.flip {
-  animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
-}
-@keyframes dangilbookflip {
-  from { transform: rotateY(0deg); opacity: 1; }
-  to { transform: rotateY(-100deg); opacity: 0.3; }
-}
-/* 모바일 반응형 */
-@media (max-width: 800px) {
+@media (min-width: 801px) {
+  .dangil-flip-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 40px 0;
+  }
   .dangil-flip-seq {
-    max-width: 97vw;
-    height: calc(97vw * 1.57);
-    min-height: 200px;
+    perspective: 1300px;
+    width: 100%;
+    max-width: 700px;
+    height: 1100px;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+  }
+  .dangil-flip-page {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px #0003;
+    position: absolute;
+    top: 0; left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    overflow: hidden;
+  }
+  .dangil-flip-page video,
+  .dangil-flip-page img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+    display: block;
+    background: #fff;
+  }
+  .dangil-flip-page.hidden { display: none !important; }
+  .dangil-flip-page.flip {
+    animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
+  }
+  @keyframes dangilbookflip {
+    from { transform: rotateY(0deg); opacity: 1; }
+    to { transform: rotateY(-100deg); opacity: 0.3; }
   }
 }
 </style>
