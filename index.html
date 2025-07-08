@@ -484,7 +484,8 @@
   async function fetchDataAirtable() {
   try {
     const res = await fetch(`https://airtable-proxy-oyrb.vercel.app/api/submit`, {
-      method: "POST",
+  method: "GET"
+});
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ baseId: AIRTABLE_BASE_ID, tableName: AIRTABLE_TABLE_NAME, action: "list" }),
     });
@@ -650,9 +651,15 @@
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    baseId: AIRTABLE_BASE_ID,
-    tableName: AIRTABLE_TABLE_NAME,
-    action: "list"
+    "접수일자": kstDateStr,
+    "고객명": name,
+    "연락처": phone,
+    "통신사": carrierBtn.textContent,
+    "상품": productBtn ? productBtn.textContent : "",
+    "부가상품": Array.from(addonBtns).map((btn) => btn.textContent).join(","),
+    "상담시간": time,
+    "진행상황": "상담예약",
+    "TV추가": tvExtraBtn ? "TV추가" : ""
   }),
 });
 );
