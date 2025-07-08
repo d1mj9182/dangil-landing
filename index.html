@@ -379,47 +379,54 @@
     </div>
     <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
 <style>
+<!-- 스타일(CSS) -->
+<style>
+.dangil-flip-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 40px 0;
+}
 .dangil-flip-seq {
   perspective: 1300px;
   width: 100%;
   max-width: 700px;
   height: 1100px;
   min-height: 400px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 .dangil-flip-page {
   width: 100%;
-  max-width: 700px;
-  height: 1100px;
+  height: 100%;
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 10px 36px #0003;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px #0003;
   position: absolute;
-  left: 0; top: 0;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
-  backface-visibility: hidden;
-  overflow: hidden;
-  will-change: transform, opacity;
+  top: 0; left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  object-fit: contain;
-  padding: 28px 18px;
-  box-sizing: border-box;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  overflow: hidden;
 }
 .dangil-flip-page video,
 .dangil-flip-page img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* 잘림 없이 전체 표시 */
-  border-radius: 14px;
+  object-fit: contain; /* 전체 보이기, 잘림 방지 */
+  border-radius: 16px;
   display: block;
   background: #fff;
 }
+.dangil-flip-page.hidden { display: none !important; }
 .dangil-flip-page.flip {
   animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
 }
@@ -427,7 +434,17 @@
   from { transform: rotateY(0deg); opacity: 1; }
   to { transform: rotateY(-100deg); opacity: 0.3; }
 }
+/* 모바일 반응형 */
+@media (max-width: 800px) {
+  .dangil-flip-seq {
+    max-width: 97vw;
+    height: calc(97vw * 1.57);
+    min-height: 200px;
+  }
+}
 </style>
+
+<!-- HTML 구조 -->
 <div class="dangil-flip-wrap">
   <div class="dangil-flip-seq">
     <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
@@ -439,6 +456,40 @@
   </div>
 </div>
 
+<!-- JS(애니메이션/전환) -->
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('dangilMainVideo');
+  const image = document.getElementById('dangilMainImage');
+  const ad = document.getElementById('dangilAdImage');
+
+  // 시작: 동영상만 보이게
+  video.classList.remove('hidden');
+  image.classList.add('hidden');
+  ad.classList.add('hidden');
+
+  video.play();
+
+  // 1. 동영상 5초 후 책넘기기 애니메이션
+  setTimeout(function() {
+    video.classList.add('flip');
+    setTimeout(function() {
+      video.classList.add('hidden'); // 동영상 숨김
+      image.classList.remove('hidden'); // 사진 등장
+      image.classList.remove('flip');
+      // 2. 사진 3초 후 책넘기기 애니메이션
+      setTimeout(function() {
+        image.classList.add('flip');
+        setTimeout(function() {
+          image.classList.add('hidden'); // 사진 숨김
+          ad.classList.remove('hidden'); // 광고 등장
+          ad.classList.remove('flip');
+        }, 800); // flip 애니메이션 시간
+      }, 3000); // 사진 노출시간 (3초)
+    }, 800); // flip 애니메이션 시간
+  }, 5000); // 동영상 노출시간 (5초)
+});
+</script>
 <script>
 window.addEventListener('DOMContentLoaded', function() {
   const video = document.getElementById('dangilMainVideo');
