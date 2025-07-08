@@ -484,10 +484,7 @@
   async function fetchDataAirtable() {
   try {
     const res = await fetch(`https://airtable-proxy-oyrb.vercel.app/api/submit`, {
-  method: "GET"
-});
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ baseId: AIRTABLE_BASE_ID, tableName: AIRTABLE_TABLE_NAME, action: "list" }),
+      method: "GET"
     });
     const data = await res.json();
     const tbody = document.getElementById("realtime-body");
