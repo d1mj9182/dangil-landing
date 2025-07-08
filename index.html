@@ -449,7 +449,6 @@
   }
 }
 </style>
-
 <div class="dangil-flip-wrap">
   <div class="dangil-flip-seq">
     <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
@@ -489,41 +488,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 800);
       }, 3000);
     }, 800);
-  }, 5000);
-});
-</script>
-</style>
-
-
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  const video = document.getElementById('dangilMainVideo');
-  const image = document.getElementById('dangilMainImage');
-  const ad = document.getElementById('dangilAdImage');
-
-  // 초기화: 동영상만 보이게
-  video.classList.remove('hidden', 'flip');
-  image.classList.add('hidden'); image.classList.remove('flip');
-  ad.classList.add('hidden'); ad.classList.remove('flip');
-  video.play();
-
-  // 1. 동영상 5초 후 책넘김
-  setTimeout(function() {
-    video.classList.add('flip');
-    setTimeout(function() {
-      video.classList.add('hidden');
-      image.classList.remove('hidden');
-      setTimeout(function() { image.classList.remove('flip'); }, 10);
-      // 2. 사진 3초 후 책넘김
-      setTimeout(function() {
-        image.classList.add('flip');
-        setTimeout(function() {
-          image.classList.add('hidden');
-          ad.classList.remove('hidden');
-          setTimeout(function() { ad.classList.remove('flip'); }, 10);
-        }, 800); // flip 애니메이션 시간
-      }, 3000);
-    }, 800); // flip 애니메이션 시간
   }, 5000);
 });
 </script>
