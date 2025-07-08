@@ -379,17 +379,12 @@
     </div>
     <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
 <style>
-.dangil-flip-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 40px 0 36px 0;
-}
 .dangil-flip-seq {
-  perspective: 1300px;
+  perspective: 1600px;
   width: 100%;
-  max-width: 600px;
-  height: 340px;
+  max-width: 860px;    /* PC에서 더 넓게 */
+  height: 480px;        /* PC에서 더 높게 */
+  min-height: 180px;
   position: relative;
   display: flex;
   align-items: center;
@@ -397,11 +392,11 @@
 }
 .dangil-flip-page {
   width: 100%;
-  max-width: 600px;
-  height: 340px;
+  max-width: 860px;
+  height: 480px;
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 28px #0003;
+  border-radius: 18px;
+  box-shadow: 0 12px 38px #0004;
   position: absolute;
   left: 0; top: 0;
   transform-style: preserve-3d;
@@ -414,24 +409,18 @@
   justify-content: center;
   object-fit: cover;
 }
-.dangil-flip-page video,
-.dangil-flip-page img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;  /* or object-fit: contain; */
-  border-radius: 16px;
-  display: block;
+@media (max-width: 950px) {
+  .dangil-flip-seq, .dangil-flip-page {
+    max-width: 97vw;
+    height: 54vw;    /* 더 높은 비율로 확대 */
+    min-height: 140px;
+  }
 }
-.dangil-flip-page.hidden { display: none !important; }
-.dangil-flip-page.flip {
-  animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
-}
-@keyframes dangilbookflip {
-  from { transform: rotateY(0deg); opacity: 1; }
-  to { transform: rotateY(-100deg); opacity: 0.3; }
-}
-@media (max-width: 800px) {
-  .dangil-flip-seq, .dangil-flip-page { max-width: 97vw; height: 30vw; min-height: 160px; }
+@media (max-width: 600px) {
+  .dangil-flip-seq, .dangil-flip-page {
+    border-radius: 10px;
+    min-height: 100px;
+  }
 }
 </style>
 
@@ -465,7 +454,7 @@ window.addEventListener('DOMContentLoaded', function() {
           image.classList.add('hidden');
           ad.classList.remove('hidden');
         }, 800); // flip 애니메이션 시간과 맞춤
-      }, 2000);
+      }, 3000);
     }, 800); // flip 애니메이션 시간과 맞춤
   }, 5000);
 });
