@@ -607,7 +607,6 @@ function maskName(name) {
   if (name.length <= 2) return name[0] + "*";
   return name[0] + "*".repeat(name.length - 2) + name[name.length - 1];
 }
-
 async function fetchDataAirtable() {
   try {
     const res = await fetch(`https://airtable-proxy-oyrb.vercel.app/api/submit`, { method: "GET" });
@@ -618,6 +617,9 @@ async function fetchDataAirtable() {
       tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
       return;
     }
+    // ★ 추가: 접수일자 기준 내림차순(최신순) 정렬
+    data.records.sort((a, b) => new Date(b.fields["접수일자"]) - new Date(a.fields["접수일자"]));
+    // -----
     const limitedRecords = data.records.slice(0, 50);
     const allRecords = [...limitedRecords, ...limitedRecords];
     allRecords.forEach((record, idx) => {
