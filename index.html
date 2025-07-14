@@ -1,25 +1,10 @@
-<!DOCTYPE html>
+원본 당일민족1<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>당일민족 상담 신청</title>
   <style>
-    /* 리얼골드 배경 */
-    .gold-bg-wrap-main {
-      width: 100vw;
-      min-height: 100vh;
-      background: linear-gradient(to right, #FFD700 0 5vw, #fff 5vw 95vw, #FFD700 95vw 100vw);
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-    }
-    .gold-bg-side {
-      background: linear-gradient(to right, #FFD700 0 18px, #fff 18px calc(100% - 18px), #FFD700 calc(100% - 18px) 100%);
-      border-radius: 20px;
-      margin-bottom: 25px;
-      box-sizing: border-box;
-    }
     /* 기존 스타일 전부 유지 */
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
     .container { max-width: 720px; margin: auto; }
@@ -209,19 +194,19 @@
 
     .realtime-section {
       background-color: #fff;
-      border-radius: 20px;
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-      margin-bottom: 20px;
-      font-size: 25px;
-      color: #000;
-      position: relative;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  margin-bottom: 20px;
+  font-size: 25px;
+  color: #000;
+  position: relative;
 
-      border: 4px solid;
-      border-image-slice: 1;
-      border-width: 4px;
-      border-image-source: linear-gradient(45deg, #ffd700, #ffb300, #fff6bf, #ffb300, #ffd700);
-    }
+  border: 4px solid;
+  border-image-slice: 1;
+  border-width: 4px;
+  border-image-source: linear-gradient(45deg, #ffd700, #ffb300, #fff6bf, #ffb300, #ffd700);
+}
     .realtime {
       max-height: 700px;
       height: 700px;
@@ -393,247 +378,226 @@
   </style>
 </head>
 <body>
-  <div class="gold-bg-wrap-main">
-    <div class="container">
-      <div class="banner">
-        <img src="form_banner_1600_400.png" alt="인터넷성지 배너" />
-      </div>
-
-      <!-- flip 영역 + 카페보러가기 버튼 -->
-      <div class="gold-bg-side">
-        <style>
-        .dangil-flip-wrap {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin: 40px 0;
-          border: 4px solid;
-          border-image-slice: 1;
-          border-width: 4px;
-          border-image-source: linear-gradient(45deg, #ffd700, #ffb300, #fff6bf, #ffb300, #ffd700);
-          border-radius: 20px;
-        }
-        .dangil-flip-seq {
-          perspective: 1300px;
-          width: 100%;
-          max-width: 700px;
-          height: 1100px;
-          min-height: 400px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-        }
-        .dangil-flip-page {
-          width: 100%;
-          height: 100%;
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 8px 28px #0003;
-          position: absolute;
-          top: 0; left: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1rem;
-          text-align: center;
-          word-break: break-all;
-          padding: 0 10px;
-          box-sizing: border-box;
-          transform-style: preserve-3d;
-          transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
-          backface-visibility: hidden;
-          will-change: transform, opacity;
-          overflow: hidden;
-        }
-        .dangil-flip-page video,
-        .dangil-flip-page img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          border-radius: 16px;
-          display: block;
-          background: #fff;
-        }
-        .dangil-flip-page.hidden { display: none !important; }
-        .dangil-flip-page.flip {
-          animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
-        }
-        @keyframes dangilbookflip {
-          from { transform: rotateY(0deg); opacity: 1; }
-          to { transform: rotateY(-100deg); opacity: 0.3; }
-        }
-        @media (max-width: 800px) {
-          .dangil-flip-seq {
-            max-width: 97vw;
-            height: calc(97vw * 1.57);
-            min-height: 200px;
-          }
-          .dangil-flip-page {
-            font-size: 0.9rem;
-            border-radius: 10px;
-          }
-        }
-        </style>
-        <div class="dangil-flip-wrap">
-          <div class="dangil-flip-seq">
-            <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
-              <source src="video.mp4" type="video/mp4">
-              동영상이 지원되지 않습니다.
-            </video>
-            <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
-            <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
-          </div>
-        </div>
-        <!-- 카페보러가기 버튼 추가 -->
-        <div style="text-align:center; margin:12px 0 24px 0;">
-          <a href="https://cafe.naver.com/ollehkt1004" target="_blank" rel="noopener"
-            style="display:inline-block;padding:13px 36px;font-size:19px;font-weight:700;
-            border-radius:8px;background:#FFD700;color:#222;text-decoration:none;
-            box-shadow:0 1px 8px #ffd70077;border:2px solid #FFD700;">
-            카페보러가기
-          </a>
-        </div>
-      </div>
-
-      <div class="review-section">
-        <div class="review-title">💬 설치 후기</div>
-        <div class="review-slider" aria-label="Customer Reviews Slider">
-          <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
-          <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
-        </div>
-        <!-- 후기보러가기 버튼 추가 -->
-        <div style="text-align:center; margin:14px 0 8px 0;">
-          <a href="https://cafe.naver.com/f-e/cafes/23720145/menus/85?viewType=I" target="_blank" rel="noopener"
-            style="display:inline-block;padding:12px 32px;font-size:18px;font-weight:700;
-            border-radius:8px;background:#FFD700;color:#222;text-decoration:none;
-            box-shadow:0 1px 8px #ffd70077;border:2px solid #FFD700;">
-            후기보러가기
-          </a>
-        </div>
-      </div>
-
-      <div class="section-separator"></div>
-
-      <div class="gold-bg-side">
-        <div class="realtime-section">
-          <h2>💬 실시간 상담 현황</h2>
-          <div class="realtime">
-            <div class="realtime-inner" id="realtime-inner">
-              <table>
-                <thead>
-                  <tr>
-                    <th>접수일자</th><th>고객명</th><th>상품</th>
-                    <th class="admin-cell">진행상황<br /><span style="font-weight:normal;font-size:13px;color:#ddd;">(관리자 변경)</span></th>
-                  </tr>
-                </thead>
-                <tbody class="realtime-table-body" id="realtime-body">
-                  <!-- 기록 없는 빈 tbody, 자동으로 JS에서 채움 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-separator"></div>
-      <form id="applicationForm" autocomplete="off">
-        <input type="hidden" name="폼구분" value="v2" />
-        <input type="hidden" name="carrier" id="carrier" />
-        <input type="hidden" name="product" id="product" />
-        <input type="hidden" name="tv_extra" id="tv_extra" />
-        <input type="hidden" name="addons" id="addons" />
-        <div class="form-title">상담예약서</div>
-        <div class="section-title" style="font-size:20px;color:#222;">Q. 상품을 선택해주세요.</div>
-        <div class="btn-group" id="product-group">
-          <button type="button">인터넷</button>
-          <button type="button">인터넷+TV</button>
-          <button type="button">인터넷+TV+집전화</button>
-          <button type="button" class="tv-extra">TV추가</button>
-        </div>
-        <div class="notice-box">
-          인터넷+TV 2대 신청이시거나 TV만 신청하신 고객님은<br />
-          반드시 <span style="color:#0077c2;font-weight:bold;">‘인터넷+TV’</span>와 <span style="color:#ffd700;font-weight:bold;">‘TV추가’</span> 버튼을 함께 선택해주세요.<br />
-          TV만 신청하실 경우 <span style="color:#ffd700;font-weight:bold;">‘TV추가’</span>만 선택하셔도 접수 가능합니다.
-        </div>
-        <div class="section-title" style="font-size:20px;color:#222;">Q. 통신사를 선택해주세요.</div>
-        <div class="btn-group" id="carrier-group">
-          <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
-          <button type="button">LG 헬로비전</button><button type="button">KT 스카이라이프</button>
-        </div>
-        <div class="section-title" style="font-size:20px;color:#222;">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
-        <div class="btn-group multi" id="addons-group">
-          <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
-        </div>
-        <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
-        <div class="form-field">
-          <label for="name">성함</label>
-          <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required />
-        </div>
-        <div class="form-field">
-          <label for="phone">연락처</label>
-          <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required />
-        </div>
-        <div class="info-banner">⏰ 24시간 연중무휴! 지금 접수하시면 바로 상담 연결됩니다.</div>
-        <div style="border-top: 2px dashed #ccc; margin: 30px 0 15px 0;"></div>
-        <div class="form-field">
-          <select name="time" id="time">
-            <option value="">상담시간 선택 (10시~22시)</option>
-            <option>10시</option><option>11시</option><option>12시</option>
-            <option>13시</option><option>14시</option><option>15시</option>
-            <option>16시</option><option>17시</option><option>18시</option>
-            <option>19시</option><option>20시</option><option>21시</option><option>22시</option>
-          </select>
-        </div>
-        <div class="privacy-box">
-          <strong>개인정보 수집 및 이용 동의</strong><br /><br />
-          - 수집 항목: 성함, 연락처, 상담 희망시간, 통신사, 상품정보<br />
-          - 수집 목적: 서비스 상담 및 가입 안내 제공<br />
-          - 보유 및 이용기간: 수집일로부터 1년간 보관 후 파기<br />
-          - 귀하는 개인정보 제공에 동의하지 않을 권리가 있으며, 미동의 시 서비스 이용에 제한이 있을 수 있습니다.
-        </div>
-        <label><input type="checkbox" required /> 위 내용을 모두 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</label>
-        <br /><br />
-        <button class="submit-btn" type="submit">상담 신청하기</button>
-      </form>
+  <div class="container">
+    <div class="banner">
+      <img src="form_banner_1600_400.png" alt="인터넷성지 배너" />
     </div>
-    <div id="review-popup" aria-hidden="true">
-      <div class="close-area" tabindex="0" role="button" aria-label="Close review popup"></div>
-      <img src="" alt="Review large view" />
+    <!-- ★ 메인베너와 후기 사이에 아래 코드 삽입 ★ -->
+<style>
+.dangil-flip-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+  border: 4px solid;
+  border-image-slice: 1;
+  border-width: 4px;
+  border-image-source: linear-gradient(45deg, #ffd700, #ffb300, #fff6bf, #ffb300, #ffd700);
+  border-radius: 20px;
+}
+.dangil-flip-seq {
+  perspective: 1300px;
+  width: 100%;
+  max-width: 700px;
+  height: 1100px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.dangil-flip-page {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px #0003;
+  position: absolute;
+  top: 0; left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;   /* 글씨 크기 조절 */
+  text-align: center;
+  word-break: break-all;
+  padding: 0 10px;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.42,0,.58,1), opacity 0.5s;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+.dangil-flip-page video,
+.dangil-flip-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 16px;
+  display: block;
+  background: #fff;
+}
+.dangil-flip-page.hidden { display: none !important; }
+.dangil-flip-page.flip {
+  animation: dangilbookflip 0.8s cubic-bezier(.42,0,.58,1);
+}
+@keyframes dangilbookflip {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to { transform: rotateY(-100deg); opacity: 0.3; }
+}
+@media (max-width: 800px) {
+  .dangil-flip-seq {
+    max-width: 97vw;
+    height: calc(97vw * 1.57);
+    min-height: 200px;
+  }
+  .dangil-flip-page {
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+}
+</style>
+
+<div class="dangil-flip-wrap">
+  <div class="dangil-flip-seq">
+    <video id="dangilMainVideo" class="dangil-flip-page" autoplay muted playsinline>
+      <source src="video.mp4" type="video/mp4">
+      동영상이 지원되지 않습니다.
+    </video>
+    <img id="dangilMainImage" class="dangil-flip-page hidden" src="photo.jpg" alt="사진">
+    <img id="dangilAdImage" class="dangil-flip-page hidden" src="ad.jpg" alt="광고">
+  </div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const video = document.getElementById('dangilMainVideo');
+  const image = document.getElementById('dangilMainImage');
+  const ad = document.getElementById('dangilAdImage');
+
+  // 초기화: 동영상만 보이게
+  video.classList.remove('hidden', 'flip');
+  image.classList.add('hidden'); image.classList.remove('flip');
+  ad.classList.add('hidden'); ad.classList.remove('flip');
+  video.play();
+
+  // 1. 동영상 5초 후 flip
+  setTimeout(function() {
+    video.classList.add('flip');
+    setTimeout(function() {
+      video.classList.add('hidden');
+      image.classList.remove('hidden');
+      setTimeout(function() { image.classList.remove('flip'); }, 10);
+      // 2. 사진 3초 후 flip
+      setTimeout(function() {
+        image.classList.add('flip');
+        setTimeout(function() {
+          image.classList.add('hidden');
+          ad.classList.remove('hidden');
+          setTimeout(function() { ad.classList.remove('flip'); }, 10);
+        }, 800);
+      }, 3000);
+    }, 800);
+  }, 5000);
+});
+</script>
+    <div class="review-section">
+      <div class="review-title">💬 설치 후기</div>
+      <div class="review-slider" aria-label="Customer Reviews Slider">
+        <div class="review-slide" tabindex="0" role="button"><img src="review1.png.png" alt="후기 1" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review2.png.png" alt="후기 2" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review3.png.png" alt="후기 3" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review4.png.png" alt="후기 4" /></div>
+        <div class="review-slide" tabindex="0" role="button"><img src="review5.png.png" alt="후기 5" /></div>
+      </div>
     </div>
+    <div class="section-separator"></div>
+    <div class="realtime-section">
+      <h2>💬 실시간 상담 현황</h2>
+      <div class="realtime">
+        <div class="realtime-inner" id="realtime-inner">
+          <table>
+            <thead>
+              <tr>
+                <th>접수일자</th><th>고객명</th><th>상품</th>
+                <th class="admin-cell">진행상황<br /><span style="font-weight:normal;font-size:13px;color:#ddd;">(관리자 변경)</span></th>
+              </tr>
+            </thead>
+            <tbody class="realtime-table-body" id="realtime-body">
+              <!-- 기록 없는 빈 tbody, 자동으로 JS에서 채움 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="section-separator"></div>
+    <form id="applicationForm" autocomplete="off">
+      <input type="hidden" name="폼구분" value="v2" />
+      <input type="hidden" name="carrier" id="carrier" />
+      <input type="hidden" name="product" id="product" />
+      <input type="hidden" name="tv_extra" id="tv_extra" />
+      <input type="hidden" name="addons" id="addons" />
+      <div class="form-title">상담예약서</div>
+      <div class="section-title" style="font-size:20px;color:#222;">Q. 상품을 선택해주세요.</div>
+      <div class="btn-group" id="product-group">
+        <button type="button">인터넷</button>
+        <button type="button">인터넷+TV</button>
+        <button type="button">인터넷+TV+집전화</button>
+        <button type="button" class="tv-extra">TV추가</button>
+      </div>
+      <div class="notice-box">
+        인터넷+TV 2대 신청이시거나 TV만 신청하신 고객님은<br />
+        반드시 <span style="color:#0077c2;font-weight:bold;">‘인터넷+TV’</span>와 <span style="color:#ffd700;font-weight:bold;">‘TV추가’</span> 버튼을 함께 선택해주세요.<br />
+        TV만 신청하실 경우 <span style="color:#ffd700;font-weight:bold;">‘TV추가’</span>만 선택하셔도 접수 가능합니다.
+      </div>
+      <div class="section-title" style="font-size:20px;color:#222;">Q. 통신사를 선택해주세요.</div>
+      <div class="btn-group" id="carrier-group">
+        <button type="button">SK</button><button type="button">KT</button><button type="button">LG</button>
+        <button type="button">LG 헬로비전</button><button type="button">KT 스카이라이프</button>
+      </div>
+      <div class="section-title" style="font-size:20px;color:#222;">Q. 부가상품을 선택해주세요. (복수 선택 가능)</div>
+      <div class="btn-group multi" id="addons-group">
+        <button type="button">유심</button><button type="button">정수기</button><button type="button">CCTV</button>
+      </div>
+      <div style="border-top: 2px dashed #ccc; margin: 30px 0;"></div>
+      <div class="form-field">
+        <label for="name">성함</label>
+        <input type="text" id="name" name="name" placeholder="성함을 입력해주세요" required />
+      </div>
+      <div class="form-field">
+        <label for="phone">연락처</label>
+        <input type="tel" id="phone" name="phone" placeholder="연락처를 입력해주세요" required />
+      </div>
+      <div class="info-banner">⏰ 24시간 연중무휴! 지금 접수하시면 바로 상담 연결됩니다.</div>
+      <div style="border-top: 2px dashed #ccc; margin: 30px 0 15px 0;"></div>
+      <div class="form-field">
+        <select name="time" id="time">
+          <option value="">상담시간 선택 (10시~22시)</option>
+          <option>10시</option><option>11시</option><option>12시</option>
+          <option>13시</option><option>14시</option><option>15시</option>
+          <option>16시</option><option>17시</option><option>18시</option>
+          <option>19시</option><option>20시</option><option>21시</option><option>22시</option>
+        </select>
+      </div>
+      <div class="privacy-box">
+        <strong>개인정보 수집 및 이용 동의</strong><br /><br />
+        - 수집 항목: 성함, 연락처, 상담 희망시간, 통신사, 상품정보<br />
+        - 수집 목적: 서비스 상담 및 가입 안내 제공<br />
+        - 보유 및 이용기간: 수집일로부터 1년간 보관 후 파기<br />
+        - 귀하는 개인정보 제공에 동의하지 않을 권리가 있으며, 미동의 시 서비스 이용에 제한이 있을 수 있습니다.
+      </div>
+      <label><input type="checkbox" required /> 위 내용을 모두 확인하였으며, 개인정보 수집 및 이용에 동의합니다.</label>
+      <br /><br />
+      <button class="submit-btn" type="submit">상담 신청하기</button>
+    </form>
+  </div>
+  <div id="review-popup" aria-hidden="true">
+    <div class="close-area" tabindex="0" role="button" aria-label="Close review popup"></div>
+    <img src="" alt="Review large view" />
   </div>
   <script>
-  window.addEventListener('DOMContentLoaded', function() {
-    const video = document.getElementById('dangilMainVideo');
-    const image = document.getElementById('dangilMainImage');
-    const ad = document.getElementById('dangilAdImage');
-    video.classList.remove('hidden', 'flip');
-    image.classList.add('hidden'); image.classList.remove('flip');
-    ad.classList.add('hidden'); ad.classList.remove('flip');
-    video.play();
-    setTimeout(function() {
-      video.classList.add('flip');
-      setTimeout(function() {
-        video.classList.add('hidden');
-        image.classList.remove('hidden');
-        setTimeout(function() { image.classList.remove('flip'); }, 10);
-        setTimeout(function() {
-          image.classList.add('flip');
-          setTimeout(function() {
-            image.classList.add('hidden');
-            ad.classList.remove('hidden');
-            setTimeout(function() { ad.classList.remove('flip'); }, 10);
-          }, 800);
-        }, 3000);
-      }, 800);
-    }, 5000);
-  });
-
 const AIRTABLE_BASE_ID = "appCRfI2EJrLQJBL";
 const AIRTABLE_TABLE_NAME = "당일민족1";
 const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
@@ -653,7 +617,9 @@ async function fetchDataAirtable() {
       tbody.innerHTML = '<tr><td colspan="4">데이터 없음</td></tr>';
       return;
     }
+    // ★ 추가: 접수일자 기준 내림차순(최신순) 정렬
     data.records.sort((a, b) => new Date(b.fields["접수일자"]) - new Date(a.fields["접수일자"]));
+    // -----
     const limitedRecords = data.records.slice(0, 50);
     const allRecords = [...limitedRecords, ...limitedRecords];
     allRecords.forEach((record, idx) => {
@@ -834,6 +800,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-  </script>
+</script>
 </body>
 </html>
