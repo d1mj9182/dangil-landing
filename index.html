@@ -827,6 +827,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+    // ======= ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ =======
+// 관리자 전용 접속수 표시 (localStorage 기반)
+// 반드시 <script> 태그로 추가, </body> 위에 붙여넣기
+(function(){
+  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
+  const key = "dangil-visit-" + new Date().toISOString().slice(0,10);
+  if(!isAdmin && !localStorage.getItem(key)) localStorage.setItem(key,"1");
+  if(isAdmin){
+    let cnt = 0;
+    for(let i=0; i<localStorage.length; ++i){
+      if(localStorage.key(i).startsWith("dangil-visit-")) cnt++;
+    }
+    const div = document.createElement("div");
+    div.style = "text-align:right;font-size:17px;font-weight:600;color:#222;margin-bottom:10px;";
+    div.textContent = "오늘 고객 접속수 (브라우저 기준): " + cnt;
+    document.querySelector('.container').prepend(div);
+  }
+})();
+// ======= ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ =======
 </script>
 </body>
 </html>
