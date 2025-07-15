@@ -4,18 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>당일민족 상담 신청</title>
-<!-- TikTok Pixel Code Start -->
-<script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
-
-  ttq.load('D1R6B9RC77U3UKIQ3O50');
-  ttq.page();
-}(window, document, 'ttq');
-</script>
-<!-- TikTok Pixel Code End -->
   <style>
     /* 기존 스타일 전부 유지 */
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
@@ -816,13 +804,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "TV추가": tvExtraBtn ? "TV추가" : ""
         }),
       });
-
-      if (res.ok) {
-        ttq.track('CompleteRegistration', {
-  // 필드명은 필요 시 맞춰 수정
-  name: name,
-  phone_number: phone
-});
+     if (res.ok) {
         alert("상담 신청이 정상적으로 접수되었습니다!");
         form.reset();
         document.querySelectorAll(".btn-group button.active")
