@@ -842,8 +842,9 @@ document.addEventListener("DOMContentLoaded", function () {
           "TV추가": tvExtraBtn ? "TV추가" : ""
         }),
       });
+
       if (res.ok) {
-        ttq.track('Lead');
+    ttq.track('Lead');
         alert("상담 신청이 정상적으로 접수되었습니다!");
         form.reset();
         document.querySelectorAll(".btn-group button.active")
