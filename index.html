@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>당일민족 상담 신청</title>
+  
   <style>
     /* 기존 스타일 전부 유지 */
     body { font-family: 'Pretendard', sans-serif; background-color: #f9fbfd; margin: 0; padding: 20px; font-size: 18px; color: #333; }
@@ -378,6 +379,24 @@
   </style>
 </head>
 <body>
+  <script>
+(function(){
+  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
+  const key = "dangil-visit-" + new Date().toISOString().slice(0,10);
+  if(!isAdmin && !localStorage.getItem(key)) localStorage.setItem(key,"1");
+  if(isAdmin){
+    let cnt = 0;
+    for(let i=0; i<localStorage.length; ++i){
+      if(localStorage.key(i).startsWith("dangil-visit-")) cnt++;
+    }
+    const div = document.createElement("div");
+    div.style = "text-align:right;font-size:17px;font-weight:600;color:#222;margin-bottom:10px;";
+    div.textContent = "오늘 고객 접속수 (브라우저 기준): " + cnt;
+    document.querySelector('.container').prepend(div);
+  }
+})();
+</script>
+
   <div class="container">
     <div class="banner">
       <img src="form_banner_1600_400.png" alt="인터넷성지 배너" />
@@ -524,35 +543,6 @@ window.addEventListener('DOMContentLoaded', function() {
     }, 800);
   }, 5000);
 });
-</script>
-
-<script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject = t;
-  var ttq = w[t] = w[t] || [];
-  ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
-  ttq.setAndDefer = function (t, e) { t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } };
-  for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
-  ttq.instance = function (t) { for (var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++)ttq.setAndDefer(e, ttq.methods[n]); return e };
-  ttq.load = function (e, n) {
-    var i = "https://analytics.tiktok.com/i18n/pixel/events.js";
-    ttq._i = ttq._i || {};
-    ttq._i[e] = [];
-    ttq._i[e]._u = i;
-    ttq._t = ttq._t || {};
-    ttq._t[e] = +new Date;
-    ttq._o = ttq._o || {};
-    ttq._o[e] = n || {};
-    var o = document.createElement("script");
-    o.type = "text/javascript";
-    o.async = !0;
-    o.src = i + "?sdkid=" + e + "&lib=" + t;
-    var a = document.getElementsByTagName("script")[0];
-    a.parentNode.insertBefore(o, a)
-  };
-  ttq.load('D1R09TBC77U78M2GS2KG'); // 본인 Pixel ID 입력
-  ttq.page();
-}(window, document, 'ttq');
 </script>
     
         <div class="review-section">
